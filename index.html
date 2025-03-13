@@ -45,6 +45,12 @@
             top: 10px;
             right: 10px;
         }
+        .mermaid {
+            margin: 20px 0;
+        }
+        h1, h2 {
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
@@ -59,34 +65,15 @@
         </div>
         
         <h2>Roadmap Timeline</h2>
-        <div class="mermaid" id="roadmap-chart">
-            gantt
-              title Architecture Roadmap Timeline
-              dateFormat YYYY-MM-DD
-              axisFormat %b %Y
-
-              section Infrastructure
-                Lean Workshop Project (Mark) :active, 2025-03-01, 2025-07-01
-
-              section Technology
-                API Gateway Implementation (Albin, Mark) :active, 2025-03-01, 2025-04-15
-
-              section Proof of Concept
-                Auth0 SAPI PoC (Mark) :active, 2025-03-01, 2025-04-01
-
-              section Product Development
-                Project Nova (Achilleas, Erik, Toby) :active, 2025-03-01, 2025-09-01
-        </div>
+        <div id="roadmap-chart"></div>
         
-        <div id="project-table">
-            <!-- Project table will be inserted here by JavaScript -->
-        </div>
+        <div id="project-table"></div>
     </div>
 
     <script>
-        // Initialize Mermaid with a specific version that works well with the syntax
+        // Initialize Mermaid
         mermaid.initialize({ 
-            startOnLoad: true, 
+            startOnLoad: false, 
             theme: 'default',
             securityLevel: 'loose'
         });
@@ -178,101 +165,60 @@
                 
                 const data = await response.json();
                 
-                // Generate the project table
+                // Generate and render the gantt chart
+                const ganttChart = generateGanttChart(data);
+                
+                // Create a div with the mermaid class and insert the chart code
+                const chartDiv = document.getElementById('roadmap-chart');
+                chartDiv.className = 'mermaid';
+                chartDiv.textContent = ganttChart;
+                
+                // Generate and insert the project table
                 const projectTable = generateProjectTable(data);
                 document.getElementById('project-table').innerHTML = projectTable;
                 
+                // Initialize Mermaid rendering
+                mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+                
                 // Set up export buttons
-                document.getElementById('export-html').addEventListener('click', () => exportHTML(data));
-                document.getElementById('export-confluence').addEventListener('click', () => exportConfluence(data));
+                document.getElementById('export-html').addEventListener('click', () => exportHTML(data, ganttChart));
+                document.getElementById('export-confluence').addEventListener('click', () => exportConfluence(data, ganttChart));
+                
+                // Create export files for direct links
+                createExportFiles(data, ganttChart);
                 
             } catch (error) {
                 console.error('Error loading roadmap data:', error);
-                document.getElementById('project-table').innerHTML = `<div style="color: red;">Error loading roadmap data: ${error.message}</div>`;
+                document.getElementById('roadmap-chart').innerHTML = `<div style="color: red;">Error loading roadmap data: ${error.message}</div>`;
+            }
+        }
+        
+        // Create export files for direct links
+        function createExportFiles(data, ganttChart) {
+            try {
+                // Create simple HTML export
+                const simpleHTML = createSimpleHTMLExport(data, ganttChart);
+                localStorage.setItem('roadmap-simple-html', simpleHTML);
+                
+                // Create Confluence export
+                let confluence = 'h1. Architecture Roadmap\n\n';
+                confluence += 'h2. Roadmap Timeline\n\n';
+                confluence += '{code:language=mermaid}\n';
+                confluence += ganttChart;
+                confluence += '\n{code}\n\n';
+                confluence += 'h2. Project Details\n\n';
+                confluence += '||Project||Architect||Type||Status||Start Date||End Date||\n';
+                data.forEach(project => {
+                    confluence += `|${project.project_name || ''}|${project.architect || ''}|${project.type || ''}|${project.status || ''}|${project.start_date || ''}|${project.end_date || ''}|\n`;
+                });
+                localStorage.setItem('roadmap-confluence', confluence);
+            } catch (error) {
+                console.error('Error creating export files:', error);
             }
         }
         
         // Create a simple HTML export page
-        function exportHTML(data) {
-            // Get the Mermaid chart from the current page
-            const ganttChart = document.querySelector('.mermaid').textContent.trim();
-            
-            const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Architecture Roadmap</title>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }
-        th { background-color: #f2f2f2; }
-    </style>
-</head>
-<body>
-    <h1>Architecture Roadmap</h1>
-    
-    <h2>Roadmap Timeline</h2>
-    <div class="mermaid">
-${ganttChart}
-    </div>
-    
-    ${generateProjectTable(data)}
-    
-    <script>
-        mermaid.initialize({ startOnLoad: true });
-    </script>
-</body>
-</html>`;
-            
-            const blob = new Blob([html], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'architecture-roadmap.html';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-        
-        // Create Confluence markup for export
-        function exportConfluence(data) {
-            // Get the Mermaid chart from the current page
-            const ganttChart = document.querySelector('.mermaid').textContent.trim();
-            
-            let confluence = 'h1. Architecture Roadmap\n\n';
-            
-            // Mermaid diagram
-            confluence += 'h2. Roadmap Timeline\n\n';
-            confluence += '{code:language=mermaid}\n';
-            confluence += ganttChart;
-            confluence += '\n{code}\n\n';
-            
-            // Project details table
-            confluence += 'h2. Project Details\n\n';
-            confluence += '||Project||Architect||Type||Status||Start Date||End Date||\n';
-            
-            data.forEach(project => {
-                confluence += `|${project.project_name || ''}|${project.architect || ''}|${project.type || ''}|${project.status || ''}|${project.start_date || ''}|${project.end_date || ''}|\n`;
-            });
-            
-            const blob = new Blob([confluence], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'confluence-roadmap.txt';
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            alert('Confluence markup exported. To use in Confluence:\n1. Create or edit a page\n2. Click "Insert" > "Markup"\n3. Select "Confluence Wiki"\n4. Paste the contents of the downloaded file\n5. Click "Insert"');
-        }
-        
-        // Create a simple HTML export page for direct linking
-        function createSimpleHTMLExport(data) {
-            // Get the Mermaid chart from the current page
-            const ganttChart = document.querySelector('.mermaid').textContent.trim();
-            
+        function createSimpleHTMLExport(data, ganttChart) {
             const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -306,34 +252,46 @@ ${ganttChart}
             return html;
         }
         
-        // Create export files for direct links
-        async function createExportFiles() {
-            try {
-                const response = await fetch('roadmap-data.json');
-                if (response.ok) {
-                    const data = await response.json();
-                    
-                    // Create simple HTML export
-                    const simpleHTML = createSimpleHTMLExport(data);
-                    localStorage.setItem('roadmap-simple-html', simpleHTML);
-                    
-                    // Create Confluence export
-                    const ganttChart = document.querySelector('.mermaid').textContent.trim();
-                    let confluence = 'h1. Architecture Roadmap\n\n';
-                    confluence += 'h2. Roadmap Timeline\n\n';
-                    confluence += '{code:language=mermaid}\n';
-                    confluence += ganttChart;
-                    confluence += '\n{code}\n\n';
-                    confluence += 'h2. Project Details\n\n';
-                    confluence += '||Project||Architect||Type||Status||Start Date||End Date||\n';
-                    data.forEach(project => {
-                        confluence += `|${project.project_name || ''}|${project.architect || ''}|${project.type || ''}|${project.status || ''}|${project.start_date || ''}|${project.end_date || ''}|\n`;
-                    });
-                    localStorage.setItem('roadmap-confluence', confluence);
-                }
-            } catch (error) {
-                console.error('Error creating export files:', error);
-            }
+        // Export as HTML
+        function exportHTML(data, ganttChart) {
+            const html = createSimpleHTMLExport(data, ganttChart);
+            
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'architecture-roadmap.html';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // Export for Confluence
+        function exportConfluence(data, ganttChart) {
+            let confluence = 'h1. Architecture Roadmap\n\n';
+            
+            // Mermaid diagram
+            confluence += 'h2. Roadmap Timeline\n\n';
+            confluence += '{code:language=mermaid}\n';
+            confluence += ganttChart;
+            confluence += '\n{code}\n\n';
+            
+            // Project details table
+            confluence += 'h2. Project Details\n\n';
+            confluence += '||Project||Architect||Type||Status||Start Date||End Date||\n';
+            
+            data.forEach(project => {
+                confluence += `|${project.project_name || ''}|${project.architect || ''}|${project.type || ''}|${project.status || ''}|${project.start_date || ''}|${project.end_date || ''}|\n`;
+            });
+            
+            const blob = new Blob([confluence], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'confluence-roadmap.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            alert('Confluence markup exported. To use in Confluence:\n1. Create or edit a page\n2. Click "Insert" > "Markup"\n3. Select "Confluence Wiki"\n4. Paste the contents of the downloaded file\n5. Click "Insert"');
         }
         
         // Handle direct export URL routes
@@ -345,19 +303,12 @@ ${ganttChart}
                     document.open();
                     document.write(html);
                     document.close();
+                    return true;
                 }
-                return true;
             } else if (path.endsWith('/export-confluence')) {
                 const confluence = localStorage.getItem('roadmap-confluence');
                 if (confluence) {
-                    const pre = document.createElement('pre');
-                    pre.style.whiteSpace = 'pre-wrap';
-                    pre.style.fontFamily = 'monospace';
-                    pre.style.margin = '20px';
-                    pre.textContent = confluence;
-                    
                     document.body.innerHTML = '<h1>Confluence Markup Export</h1>';
-                    document.body.appendChild(pre);
                     
                     const copyButton = document.createElement('button');
                     copyButton.textContent = 'Copy to Clipboard';
@@ -368,9 +319,17 @@ ${ganttChart}
                             alert('Copied to clipboard');
                         });
                     });
-                    document.body.insertBefore(copyButton, pre);
+                    document.body.appendChild(copyButton);
+                    
+                    const pre = document.createElement('pre');
+                    pre.style.whiteSpace = 'pre-wrap';
+                    pre.style.fontFamily = 'monospace';
+                    pre.style.margin = '20px';
+                    pre.textContent = confluence;
+                    document.body.appendChild(pre);
+                    
+                    return true;
                 }
-                return true;
             }
             return false;
         }
@@ -381,8 +340,6 @@ ${ganttChart}
             if (!handleExportRoutes()) {
                 // Load the regular roadmap
                 loadRoadmap();
-                // Create export files for direct links
-                createExportFiles();
             }
         });
     </script>
