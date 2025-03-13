@@ -72,52 +72,61 @@
         // Initialize Mermaid
         mermaid.initialize({ startOnLoad: false, theme: 'default' });
         
-// Function to generate Mermaid gantt chart from project data
-function generateGanttChart(data) {
-  let gantt = 'gantt\n';
-  gantt += '  title Architecture Roadmap Timeline\n';
-  gantt += '  dateFormat YYYY-MM-DD\n';
-  gantt += '  axisFormat %b %Y\n\n';
-  
-  // Group projects by architect - handling multiple architects
-  const architectProjects = {};
-  
-  data.forEach(project => {
-    // Handle multiple architects
-    const architectsList = project.architect.split(', ');
-    
-    // Assign to primary architect (first in list)
-    const primaryArchitect = architectsList[0] || 'Unassigned';
-    
-    if (!architectProjects[primaryArchitect]) {
-      architectProjects[primaryArchitect] = [];
-    }
-    architectProjects[primaryArchitect].push(project);
-  });
-  
-  // Add projects to gantt chart
-  for (const architect in architectProjects) {
-    gantt += `  section ${architect}\n`;
-    
-    architectProjects[architect].forEach(project => {
-      let status = 'active';
-      const statusLower = (project.status || '').toLowerCase();
-      
-      if (statusLower.includes('complete') || statusLower.includes('done')) {
-        status = 'done';
-      } else if (statusLower.includes('plan')) {
-        status = 'planned';
-      }
-      
-      // Escape project name to avoid syntax issues
-      const safeName = project.project_name.replace(/:/g, '-');
-      
-      gantt += `    ${safeName} :${status}, ${project.start_date}, ${project.end_date}\n`;
-    });
-  }
-  
-  return gantt;
-}
+        // Function to generate Mermaid gantt chart from project data
+        function generateGanttChart(data) {
+          let gantt = 'gantt\n';
+          gantt += '  title Architecture Roadmap Timeline\n';
+          gantt += '  dateFormat YYYY-MM-DD\n';
+          gantt += '  axisFormat %b %Y\n\n';
+          
+          // Group projects by type
+          const projectTypes = {};
+          
+          data.forEach(project => {
+            // Use project type as section, defaulting to "Other" if not specified
+            const type = project.type || 'Other';
+            
+            if (!projectTypes[type]) {
+              projectTypes[type] = [];
+            }
+            
+            // Create a safe project object
+            projectTypes[type].push({
+              name: project.project_name.replace(/:/g, '-').replace(/,/g, ''),
+              architect: project.architect || 'Unassigned',
+              status: project.status,
+              start: project.start_date,
+              end: project.end_date
+            });
+          });
+          
+          // Sort project types alphabetically
+          const sortedTypes = Object.keys(projectTypes).sort();
+          
+          // Generate the gantt sections
+          sortedTypes.forEach(type => {
+            gantt += `  section ${type}\n`;
+            
+            projectTypes[type].forEach(project => {
+              // Determine status safely
+              let statusCode = 'active';
+              const statusLower = (project.status || '').toLowerCase();
+              
+              if (statusLower.includes('complete') || statusLower.includes('done')) {
+                statusCode = 'done';
+              } else if (statusLower.includes('plan')) {
+                statusCode = 'planned';
+              }
+              
+              // Include architect(s) in the task description
+              const taskName = `${project.name} (${project.architect})`;
+              
+              gantt += `    ${taskName} :${statusCode}, ${project.start}, ${project.end}\n`;
+            });
+          });
+          
+          return gantt;
+        }
 
         // Generate project table
         function generateProjectTable(data) {
