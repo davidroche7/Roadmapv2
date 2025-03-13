@@ -10,6 +10,7 @@
         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
         th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }
         th { background-color: #f2f2f2; }
+        .mermaid { margin: 20px 0; }
     </style>
 </head>
 <body>
@@ -17,22 +18,48 @@
     
     <h2>Roadmap Timeline</h2>
     <div class="mermaid">
-        gantt
-          title Architecture Roadmap Timeline
-          dateFormat YYYY-MM-DD
-          axisFormat %b %Y
+gantt
+  title Architecture Roadmap Timeline
+  dateFormat YYYY-MM-DD
+  axisFormat %b %Y
 
-          section Infrastructure
-            Lean Workshop Project (Mark) :active, 2025-03-01, 2025-07-01
+  section Business Case
+    Auto-scaling for Game Platforms (Keith) :active, 2025-03-01, 2025-05-30
 
-          section Technology
-            API Gateway Implementation (Albin, Mark) :active, 2025-03-01, 2025-04-15
+  section Client Delivery
+    PGCB Portal (Toby) :active, 2025-03-01, 2025-06-30
+    Veikkaus OGS Integration (Keith) :active, 2025-03-01, 2025-06-30
 
-          section Proof of Concept
-            Auth0 SAPI PoC (Mark) :active, 2025-03-01, 2025-04-01
+  section Client RFP
+    BCLC Solution Design (Unassigned) :active, 2025-03-01, 2025-06-01
+    Veikkaus PAM (Toby, Achilleas, Erik) :active, 2025-03-01, 2025-05-01
 
-          section Product Development
-            Project Nova (Achilleas, Erik, Toby) :active, 2025-03-01, 2025-09-01
+  section Infrastructure
+    Lean Workshop Project (Mark) :active, 2025-03-01, 2025-07-01
+
+  section Internal Engineering
+    AI Chatbot (Albin) :active, 2025-03-01, 2025-07-01
+
+  section Lean Workshop Output
+    Consolidated Game Status Dashboard (Unassigned) :planned, 2025-04-01, 2025-07-01
+    Compliance Checking (Unassigned) :planned, 2025-04-01, 2025-07-01
+
+  section Product
+    Italian Checkum Project (Mark) :active, 2025-03-15, 2025-06-15
+    Free2play (Sam) :active, 2025-03-15, 2025-09-15
+    DataHub Phase 3 (Albin) :active, 2025-03-01, 2025-05-01
+    GCM New Relic Development (Sam) :active, 2025-03-15, 2025-07-15
+    RGS Light Rollout (Albin) :planned, 2025-03-15, 2025-06-30
+    GCM Integration Improvements (Sam) :active, 2025-03-15, 2025-06-15
+
+  section Product Development
+    Project Nova (Achilleas, Erik, Toby) :active, 2025-03-01, 2025-09-01
+
+  section Proof of Concept
+    Auth0 SAPI PoC (Mark) :active, 2025-03-01, 2025-04-01
+
+  section Technology
+    API Gateway Implementation (Albin, Mark) :active, 2025-03-01, 2025-04-15
     </div>
     
     <h2>Project Details</h2>
@@ -77,10 +104,125 @@
             <td>2025-03-01</td>
             <td>2025-09-01</td>
         </tr>
+        <tr>
+            <td>Italian Checkum Project</td>
+            <td>Mark</td>
+            <td>Product</td>
+            <td>Stage Gate 0</td>
+            <td>2025-03-15</td>
+            <td>2025-06-15</td>
+        </tr>
+        <tr>
+            <td>Free2play</td>
+            <td>Sam</td>
+            <td>Product</td>
+            <td>Stage Gate 1</td>
+            <td>2025-03-15</td>
+            <td>2025-09-15</td>
+        </tr>
+        <tr>
+            <td>DataHub Phase 3</td>
+            <td>Albin</td>
+            <td>Product</td>
+            <td>Stage Gate 2</td>
+            <td>2025-03-01</td>
+            <td>2025-05-01</td>
+        </tr>
+        <tr>
+            <td>PGCB Portal</td>
+            <td>Toby</td>
+            <td>Client Delivery</td>
+            <td>Requirements Gathering</td>
+            <td>2025-03-01</td>
+            <td>2025-06-30</td>
+        </tr>
+        <tr>
+            <td>BCLC Solution Design</td>
+            <td>Unassigned</td>
+            <td>Client RFP</td>
+            <td>Requirements Gathering</td>
+            <td>2025-03-01</td>
+            <td>2025-06-01</td>
+        </tr>
+        <tr>
+            <td>Veikkaus OGS Integration</td>
+            <td>Keith</td>
+            <td>Client Delivery</td>
+            <td>In Progress</td>
+            <td>2025-03-01</td>
+            <td>2025-06-30</td>
+        </tr>
+        <tr>
+            <td>GCM New Relic Development</td>
+            <td>Sam</td>
+            <td>Product</td>
+            <td>Stage Gate 1</td>
+            <td>2025-03-15</td>
+            <td>2025-07-15</td>
+        </tr>
+        <tr>
+            <td>Veikkaus PAM</td>
+            <td>Toby, Achilleas, Erik</td>
+            <td>Client RFP</td>
+            <td>Awaiting Response</td>
+            <td>2025-03-01</td>
+            <td>2025-05-01</td>
+        </tr>
+        <tr>
+            <td>RGS Light Rollout</td>
+            <td>Albin</td>
+            <td>Product</td>
+            <td>Planned</td>
+            <td>2025-03-15</td>
+            <td>2025-06-30</td>
+        </tr>
+        <tr>
+            <td>Auto-scaling for Game Platforms</td>
+            <td>Keith</td>
+            <td>Business Case</td>
+            <td>Analysis</td>
+            <td>2025-03-01</td>
+            <td>2025-05-30</td>
+        </tr>
+        <tr>
+            <td>GCM Integration Improvements</td>
+            <td>Sam</td>
+            <td>Product</td>
+            <td>Stage Gate 1</td>
+            <td>2025-03-15</td>
+            <td>2025-06-15</td>
+        </tr>
+        <tr>
+            <td>Consolidated Game Status Dashboard</td>
+            <td>Unassigned</td>
+            <td>Lean Workshop Output</td>
+            <td>Planned</td>
+            <td>2025-04-01</td>
+            <td>2025-07-01</td>
+        </tr>
+        <tr>
+            <td>Compliance Checking</td>
+            <td>Unassigned</td>
+            <td>Lean Workshop Output</td>
+            <td>Planned</td>
+            <td>2025-04-01</td>
+            <td>2025-07-01</td>
+        </tr>
+        <tr>
+            <td>AI Chatbot</td>
+            <td>Albin</td>
+            <td>Internal Engineering</td>
+            <td>Demo</td>
+            <td>2025-03-01</td>
+            <td>2025-07-01</td>
+        </tr>
     </table>
     
     <script>
-        mermaid.initialize({ startOnLoad: true });
+        mermaid.initialize({ 
+            startOnLoad: true,
+            securityLevel: 'loose'
+        });
     </script>
 </body>
 </html>
