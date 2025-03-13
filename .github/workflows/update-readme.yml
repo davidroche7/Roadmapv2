@@ -1,38 +1,138 @@
 name: Update Readme Roadmap
-
 on:
   push:
     paths:
       - 'roadmap-data.json'
   workflow_dispatch:
-
 jobs:
   update-roadmap:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '16'
-          
-      - name: Generate Mermaid URL
+          node-version: '18'
+      
+      - name: Create Mermaid Generation Script
         run: |
-          # Get the current data
-          DATA=$(cat roadmap-data.json)
+          cat > generate-mermaid.js << 'EOF'
+          const fs = require('fs');
+
+          // Function to generate Mermaid gantt chart from project data
+          function generateGanttChart(projects) {
+            let gantt = 'gantt\n';
+            gantt += '  title Architecture Roadmap Timeline\n';
+            gantt += '  dateFormat YYYY-MM-DD\n';
+            gantt += '  axisFormat %b %Y\n\n';
+            
+            // Group projects by type
+            const projectTypes = {};
+            
+            projects.forEach(project => {
+              // Use project type as section, defaulting to "Other" if not specified
+              const type = project.type || 'Other';
+              
+              if (!projectTypes[type]) {
+                projectTypes[type] = [];
+              }
+              
+              // Create a safe project object
+              projectTypes[type].push({
+                name: project.project_name.replace(/:/g, '-').replace(/,/g, ''),
+                architect: project.architect || 'Unassigned',
+                status: project.status,
+                start: project.start_date,
+                end: project.end_date
+              });
+            });
+            
+            // Sort project types alphabetically
+            const sortedTypes = Object.keys(projectTypes).sort();
+            
+            // Generate the gantt sections
+            sortedTypes.forEach(type => {
+              gantt += `  section ${type}\n`;
+              
+              projectTypes[type].forEach(project => {
+                // Determine status safely
+                let statusCode = 'active';
+                const statusLower = (project.status || '').toLowerCase();
+                
+                if (statusLower.includes('complete') || statusLower.includes('done')) {
+                  statusCode = 'done';
+                } else if (statusLower.includes('plan')) {
+                  statusCode = 'planned';
+                }
+                
+                // Include architect(s) in the task description
+                const taskName = `${project.name} (${project.architect})`;
+                
+                gantt += `    ${taskName} :${statusCode}, ${project.start}, ${project.end}\n`;
+              });
+            });
+            
+            return gantt;
+          }
+
+          try {
+            // Read project data
+            const data = JSON.parse(fs.readFileSync('roadmap-data.json', 'utf8'));
+            
+            // Generate mermaid chart
+            const mermaidContent = generateGanttChart(data);
+            
+            // Output to stdout (will be captured by the GitHub Action)
+            console.log(mermaidContent);
+          } catch (error) {
+            console.error('Error generating Mermaid chart:', error);
+            process.exit(1);
+          }
+          EOF
+      
+      - name: Generate Mermaid URL
+        id: mermaid
+        run: |
+          # Generate the Mermaid diagram content
+          MERMAID_CONTENT=$(node generate-mermaid.js)
           
-          # Create a URL to render the mermaid diagram using mermaid.ink
-          ENCODED_DATA=$(echo $DATA | jq -r @uri)
-          MERMAID_URL="https://mermaid.ink/img/eyJjb2RlIjoiZ2FudHRcbiAgICB0aXRsZSBBcmNoaXRlY3R1cmUgUm9hZG1hcCBUaW1lbGluZVxuICAgIGRhdGVGb3JtYXQgWVlZWS1NTS1ERFxuICAgIGF4aXNGb3JtYXQgJWIgJVlcblxuICAgIHNlY3Rpb24gU3RhbmxleVxuICAgICBXb3JrIG9iamVjdCAxIDphY3RpdmUsIDIwMjUtMDItMjEsIDIwMjUtMDktMjNcblxuICAgIHNlY3Rpb24gQWxhblxuICAgICBGZWF0dXJlIFggUmVkZXNpZ24gOmRvbmUsIDIwMjUtMDEtMDEsIDIwMjUtMDMtMDFcbiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19"
+          # Check if the content was generated successfully
+          if [ $? -ne 0 ]; then
+            echo "Failed to generate Mermaid content"
+            exit 1
+          fi
+          
+          # Create URL-safe base64 encoding for Mermaid.ink
+          # Need to pipe through 'jq' to properly escape the content
+          ENCODED_CONTENT=$(echo "$MERMAID_CONTENT" | node -e "
+            const fs = require('fs');
+            const mermaid = fs.readFileSync(0, 'utf-8');
+            const payload = JSON.stringify({ code: mermaid, mermaid: { theme: 'default' } });
+            const encoded = Buffer.from(payload).toString('base64')
+              .replace(/\+/g, '-')
+              .replace(/\//g, '_')
+              .replace(/=+$/, '');
+            console.log(encoded);
+          ")
+          
+          # Create the proper mermaid.ink URL
+          MERMAID_URL="https://mermaid.ink/img/$ENCODED_CONTENT?type=png"
+          echo "Generated Mermaid URL: $MERMAID_URL"
           
           # Update the README with the new URL
-          sed -i "s|https://mermaid.ink/img/.*|$MERMAID_URL)|" README.md
-          
+          sed -i "s|https://mermaid.ink/img/.*type=png|$MERMAID_URL|" README.md
+      
       - name: Commit and push if changed
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
           git add README.md
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update roadmap in README"
+          # Only commit if there are changes
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update roadmap in README [skip ci]"
           git push
