@@ -1,18 +1,182 @@
 [
   {
-    "project_name": "Work object 1",
-    "architect": "Stanley",
-    "type": "Product roadmap",
+    "project_name": "Lean Workshop Project",
+    "architect": "Mark",
+    "type": "Infrastructure",
     "status": "In Progress",
-    "start_date": "2025-02-21",
-    "end_date": "2025-09-23"
+    "start_date": "2025-03-01",
+    "end_date": "2025-07-01",
+    "description": "Separation of environments",
+    "technologies": ["Data Analysis"]
   },
   {
-    "project_name": "Feature X Redesign",
-    "architect": "Alan",
-    "type": "Feature",
-    "status": "Complete",
-    "start_date": "2025-01-01",
-    "end_date": "2025-03-01"
+    "project_name": "API Gateway Implementation",
+    "architect": "Albin, Mark",
+    "type": "Technology",
+    "status": "Commercial",
+    "start_date": "2025-03-01",
+    "end_date": "2025-04-15",
+    "description": "API gateway implementation and licensing",
+    "technologies": ["WSO2"]
+  },
+  {
+    "project_name": "Auth0 SAPI PoC",
+    "architect": "Mark",
+    "type": "Proof of Concept",
+    "status": "In Progress",
+    "start_date": "2025-03-01",
+    "end_date": "2025-04-01",
+    "description": "Proof of concept for SAPI integration",
+    "technologies": ["Auth0"]
+  },
+  {
+    "project_name": "Project Nova",
+    "architect": "Achilleas, Erik, Toby",
+    "type": "Product Development",
+    "status": "In Progress",
+    "start_date": "2025-03-01",
+    "end_date": "2025-09-01",
+    "description": "Major product development initiative",
+    "technologies": ["Auth0", "WSO2", "MongoDB", "Spring Boot", "Spring Cloud", "PostgreSQL"]
+  },
+  {
+    "project_name": "Italian Checkum Project",
+    "architect": "Mark",
+    "type": "Product",
+    "status": "Stage Gate 0",
+    "start_date": "2025-03-15",
+    "end_date": "2025-06-15",
+    "description": "Product-driven development project",
+    "technologies": []
+  },
+  {
+    "project_name": "Free2play",
+    "architect": "Sam",
+    "type": "Product",
+    "status": "Stage Gate 1",
+    "start_date": "2025-03-15",
+    "end_date": "2025-09-15",
+    "description": "Product-driven development project",
+    "technologies": ["GCM"]
+  },
+  {
+    "project_name": "DataHub Phase 3",
+    "architect": "Albin",
+    "type": "Product",
+    "status": "Stage Gate 2",
+    "start_date": "2025-03-01",
+    "end_date": "2025-05-01",
+    "description": "Product-driven data hub expansion",
+    "technologies": ["Kafka"]
+  },
+  {
+    "project_name": "PGCB Portal",
+    "architect": "Toby",
+    "type": "Client Delivery",
+    "status": "Requirements Gathering",
+    "start_date": "2025-03-01",
+    "end_date": "2025-06-30",
+    "description": "Client delivery for PGCB portal",
+    "technologies": ["Flipside", "Nova", "OPS", "WSO2"]
+  },
+  {
+    "project_name": "BCLC Solution Design",
+    "architect": "Unassigned",
+    "type": "Client RFP",
+    "status": "Requirements Gathering",
+    "start_date": "2025-03-01",
+    "end_date": "2025-06-01",
+    "description": "Client RFP response for BCLC",
+    "technologies": ["OPS", "AWS"]
+  },
+  {
+    "project_name": "Veikkaus OGS Integration",
+    "architect": "Keith",
+    "type": "Client Delivery",
+    "status": "In Progress",
+    "start_date": "2025-03-01",
+    "end_date": "2025-06-30",
+    "description": "Client delivery for Veikkaus OGS",
+    "technologies": ["OGS", "WSO2"]
+  },
+  {
+    "project_name": "GCM New Relic Development",
+    "architect": "Sam",
+    "type": "Product",
+    "status": "Stage Gate 1",
+    "start_date": "2025-03-15",
+    "end_date": "2025-07-15",
+    "description": "Product-driven New Relic integration",
+    "technologies": ["GCM", "New Relic"]
+  },
+  {
+    "project_name": "Veikkaus PAM",
+    "architect": "Toby, Achilleas, Erik",
+    "type": "Client RFP",
+    "status": "Awaiting Response",
+    "start_date": "2025-03-01",
+    "end_date": "2025-05-01",
+    "description": "RFP response for Veikkaus PAM",
+    "technologies": []
+  },
+  {
+    "project_name": "RGS Light Rollout",
+    "architect": "Albin",
+    "type": "Product",
+    "status": "Planned",
+    "start_date": "2025-03-15",
+    "end_date": "2025-06-30",
+    "description": "Rollout of RGS Light",
+    "technologies": ["RGS"]
+  },
+  {
+    "project_name": "Auto-scaling for Game Platforms",
+    "architect": "Keith",
+    "type": "Business Case",
+    "status": "Analysis",
+    "start_date": "2025-03-01",
+    "end_date": "2025-05-30",
+    "description": "Auto-scaling for OGS/RGS/GDM platforms",
+    "technologies": ["OGS", "RGS", "GDM"]
+  },
+  {
+    "project_name": "GCM Integration Improvements",
+    "architect": "Sam",
+    "type": "Product",
+    "status": "Stage Gate 1",
+    "start_date": "2025-03-15",
+    "end_date": "2025-06-15",
+    "description": "Product-driven GCM integration improvements",
+    "technologies": ["GCM"]
+  },
+  {
+    "project_name": "Consolidated Game Status Dashboard",
+    "architect": "Unassigned",
+    "type": "Lean Workshop Output",
+    "status": "Planned",
+    "start_date": "2025-04-01",
+    "end_date": "2025-07-01",
+    "description": "Dashboard for consolidated game status",
+    "technologies": ["Data Visualization"]
+  },
+  {
+    "project_name": "Compliance Checking",
+    "architect": "Unassigned",
+    "type": "Lean Workshop Output",
+    "status": "Planned",
+    "start_date": "2025-04-01",
+    "end_date": "2025-07-01",
+    "description": "Automated compliance checking system",
+    "technologies": ["Compliance"]
+  },
+  {
+    "project_name": "AI Chatbot",
+    "architect": "Albin",
+    "type": "Internal Engineering",
+    "status": "Demo",
+    "start_date": "2025-03-01",
+    "end_date": "2025-07-01",
+    "description": "AI-backed chatbot using AWS Titan text model",
+    "technologies": ["AI", "AWS Titan"]
   }
 ]
