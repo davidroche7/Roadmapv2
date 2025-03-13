@@ -1,0 +1,18 @@
+[
+  {
+    "project_name": "Work object 1",
+    "architect": "Stanley",
+    "type": "Product roadmap",
+    "status": "In Progress",
+    "start_date": "2025-02-21",
+    "end_date": "2025-09-23"
+  },
+  {
+    "project_name": "Feature X Redesign",
+    "architect": "Alan",
+    "type": "Feature",
+    "status": "Complete",
+    "start_date": "2025-01-01",
+    "end_date": "2025-03-01"
+  }
+]
