@@ -1,12 +1,12 @@
 [
   {
-    "project_name": "Lean Workshop Project",
+    "project_name": "Separation of Environments",
     "architect": "Mark",
-    "type": "Infrastructure",
+    "type": "Lean Workshop Output",
     "status": "In Progress",
     "start_date": "2025-03-01",
     "end_date": "2025-07-01",
-    "description": "Separation of environments",
+    "description": "Assessment of Stage environments for testing",
     "technologies": ["Data Analysis"]
   },
   {
