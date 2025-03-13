@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confluence Markup Export</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        pre { white-space: pre-wrap; font-family: monospace; margin: 20px; padding: 15px; background-color: #f5f5f5; border: 1px solid #ddd; }
+        button { margin: 20px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Confluence Markup Export</h1>
+    
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    
+    <pre id="confluence-content">h1. Architecture Roadmap
+
+h2. Roadmap Timeline
+
+{code:language=mermaid}
+gantt
+  title Architecture Roadmap Timeline
+  dateFormat YYYY-MM-DD
+  axisFormat %b %Y
+
+  section Infrastructure
+    Lean Workshop Project (Mark) :active, 2025-03-01, 2025-07-01
+
+  section Technology
+    API Gateway Implementation (Albin, Mark) :active, 2025-03-01, 2025-04-15
+
+  section Proof of Concept
+    Auth0 SAPI PoC (Mark) :active, 2025-03-01, 2025-04-01
+
+  section Product Development
+    Project Nova (Achilleas, Erik, Toby) :active, 2025-03-01, 2025-09-01
+{code}
+
+h2. Project Details
+
+||Project||Architect||Type||Status||Start Date||End Date||
+|Lean Workshop Project|Mark|Infrastructure|In Progress|2025-03-01|2025-07-01|
+|API Gateway Implementation|Albin, Mark|Technology|Commercial|2025-03-01|2025-04-15|
+|Auth0 SAPI PoC|Mark|Proof of Concept|In Progress|2025-03-01|2025-04-01|
+|Project Nova|Achilleas, Erik, Toby|Product Development|In Progress|2025-03-01|2025-09-01|</pre>
+    
+    <script>
+        function copyToClipboard() {
+            const content = document.getElementById('confluence-content').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                alert('Copied to clipboard');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
