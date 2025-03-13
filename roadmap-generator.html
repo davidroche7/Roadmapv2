@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture Team Roadmap Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        textarea {
+            width: 100%;
+            height: 400px;
+            font-family: monospace;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #3e8e41;
+        }
+        .panel {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+        }
+        #outputPanel, #renderedOutput, #techRadarOutput, #assetRegistryOutput {
+            width: 100%;
+            min-height: 400px;
+            background-color: white;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 0 5px 5px 5px;
+            overflow: auto;
+        }
+        .hidden {
+            display: none;
+        }
+        #sampleData {
+            width: 100%;
+            height: 200px;
+            font-family: monospace;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            overflow: auto;
+            margin-top: 10px;
+        }
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .status-done {
+            background-color: #d4edda;
+        }
+        .status-active {
+            background-color: #fff3cd;
+        }
+        .status-planned {
+            background-color: #d1ecf1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Architecture Team Roadmap Generator</h1>
+        
+        <div class="panel">
+            <h2>Instructions</h2>
+            <p>This tool allows you to manually input roadmap data in JSON format and generate visualizations that match your specifications. Follow these steps:</p>
+            <ol>
+                <li>Enter your roadmap data in the JSON editor below (or use the sample data button)</li>
+                <li>Click "Generate Visualizations" to create the roadmap, tech radar, and asset registry</li>
+                <li>View and copy the results from the tabs below</li>
+                <li>Export the results to HTML or Markdown for sharing or further editing</li>
+            </ol>
+            <button id="showSampleBtn">Show Sample Data Format</button>
+            <div id="sampleData" class="hidden"></div>
+        </div>
+        
+        <div class="panel">
+            <h2>JSON Data Input</h2>
+            <p>Enter your roadmap data in JSON format:</p>
+            <textarea id="jsonInput" placeholder="Paste your JSON data here..."></textarea>
+            <div style="margin-top: 15px;">
+                <button id="generateBtn">Generate Visualizations</button>
+                <button id="exportHtmlBtn">Export as HTML</button>
+                <button id="exportMarkdownBtn">Export as Markdown</button>
+                <button id="saveJsonBtn">Save JSON Data</button>
+                <button id="loadJsonBtn">Load JSON Data</button>
+                <input type="file" id="jsonFileInput" accept=".json" style="display: none;">
+            </div>
+        </div>
+        
+        <div class="panel">
+            <h2>Output</h2>
+            <div class="tabs">
+                <div class="tab active" data-tab="roadmap">Roadmap</div>
+                <div class="tab" data-tab="techRadar">Tech Radar</div>
+                <div class="tab" data-tab="assetRegistry">Asset Registry</div>
+            </div>
+            <div id="outputPanel">
+                <div id="renderedOutput" class="tab-content"></div>
+                <div id="techRadarOutput" class="tab-content hidden"></div>
+                <div id="assetRegistryOutput" class="tab-content hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        
+        // Sample data
+        const sampleData = {
+            "projects": [
+                {
+                    "name": "Feature X Redesign",
+                    "owner": "Alan",
+                    "status": "done",
+                    "startDate": "2025-01-01",
+                    "endDate": "2025-03-01",
+                    "technologies": ["React", "Node.js", "MongoDB"],
+                    "environment": "Production",
+                    "description": "Redesigning Feature X for better performance"
+                },
+                {
+                    "name": "New Payment Integration",
+                    "owner": "Bob",
+                    "status": "active",
+                    "startDate": "2025-03-01",
+                    "endDate": "2025-06-01",
+                    "technologies": ["Stripe API", "AWS Lambda", "DynamoDB"],
+                    "environment": "Development",
+                    "description": "Integrating new payment provider"
+                },
+                {
+                    "name": "Feature Y Optimization",
+                    "owner": "Chris",
+                    "status": "planned",
+                    "startDate": "2025-06-01",
+                    "endDate": "2025-09-01",
+                    "technologies": ["Python", "Tensorflow", "Docker"],
+                    "environment": "Testing",
+                    "description": "Performance optimization for Feature Y"
+                },
+                {
+                    "name": "Cloud Migration Strategy",
+                    "owner": "David",
+                    "status": "done",
+                    "startDate": "2025-01-01",
+                    "endDate": "2025-04-01",
+                    "technologies": ["AWS", "Terraform", "Kubernetes"],
+                    "environment": "Production",
+                    "description": "Migrating legacy systems to cloud"
+                },
+                {
+                    "name": "Tech Debt Reduction",
+                    "owner": "Elaine",
+                    "status": "active",
+                    "startDate": "2025-02-15",
+                    "endDate": "2025-05-15",
+                    "technologies": ["Java", "Spring Boot", "PostgreSQL"],
+                    "environment": "Production",
+                    "description": "Reducing technical debt in core systems"
+                },
+                {
+                    "name": "Microservices Rework",
+                    "owner": "Frank",
+                    "status": "planned",
+                    "startDate": "2025-07-01",
+                    "endDate": "2025-10-01",
+                    "technologies": ["Golang", "gRPC", "Consul"],
+                    "environment": "Development",
+                    "description": "Refactoring monolith into microservices"
+                },
+                {
+                    "name": "Zero Trust Security Model",
+                    "owner": "Geoff",
+                    "status": "active",
+                    "startDate": "2025-03-01",
+                    "endDate": "2025-06-30",
+                    "technologies": ["OAuth2", "OpenID Connect", "SIEM"],
+                    "environment": "All",
+                    "description": "Implementing zero trust security model"
+                },
+                {
+                    "name": "API Security Hardening",
+                    "owner": "Henry",
+                    "status": "planned",
+                    "startDate": "2025-07-01",
+                    "endDate": "2025-09-30",
+                    "technologies": ["Apigee", "OAuth2", "JWT"],
+                    "environment": "Production",
+                    "description": "Hardening API security"
+                },
+                {
+                    "name": "AI-driven Observability",
+                    "owner": "Irene",
+                    "status": "active",
+                    "startDate": "2025-04-01",
+                    "endDate": "2025-06-30",
+                    "technologies": ["ElasticSearch", "Kibana", "TensorFlow"],
+                    "environment": "Production",
+                    "description": "Implementing AI for system observability"
+                },
+                {
+                    "name": "Edge Computing Pilot",
+                    "owner": "Jim",
+                    "status": "planned",
+                    "startDate": "2025-08-01",
+                    "endDate": "2025-11-30",
+                    "technologies": ["Kubernetes Edge", "IoT", "5G"],
+                    "environment": "Development",
+                    "description": "Piloting edge computing solutions"
+                }
+            ],
+            "techRadar": {
+                "quadrants": [
+                    "Languages & Frameworks",
+                    "Tools",
+                    "Platforms & Infrastructure",
+                    "Techniques"
+                ],
+                "rings": [
+                    "Adopt",
+                    "Trial",
+                    "Assess",
+                    "Hold"
+                ],
+                "items": [
+                    {
+                        "name": "React",
+                        "quadrant": "Languages & Frameworks",
+                        "ring": "Adopt"
+                    },
+                    {
+                        "name": "Node.js",
+                        "quadrant": "Languages & Frameworks",
+                        "ring": "Adopt"
+                    },
+                    {
+                        "name": "Golang",
+                        "quadrant": "Languages & Frameworks",
+                        "ring": "Trial"
+                    },
+                    {
+                        "name": "Python",
+                        "quadrant": "Languages & Frameworks",
+                        "ring": "Adopt"
+                    },
+                    {
+                        "name": "Kubernetes",
+                        "quadrant": "Platforms & Infrastructure",
+                        "ring": "Adopt"
+                    },
+                    {
+                        "name": "AWS",
+                        "quadrant": "Platforms & Infrastructure",
+                        "ring": "Adopt"
+                    },
+                    {
+                        "name": "Terraform",
+                        "quadrant": "Tools",
+                        "ring": "Adopt"
+                    },
+                    {
+                        "name": "Docker",
+                        "quadrant": "Tools",
+                        "ring": "Adopt"
+                    },
+                    {
+                        "name": "Microservices",
+                        "quadrant": "Techniques",
+                        "ring": "Adopt"
+                    },
+                    {
+                        "name": "Zero Trust Security",
+                        "quadrant": "Techniques",
+                        "ring": "Trial"
+                    },
+                    {
+                        "name": "Edge Computing",
+                        "quadrant": "Platforms & Infrastructure",
+                        "ring": "Assess"
+                    },
+                    {
+                        "name": "TensorFlow",
+                        "quadrant": "Tools",
+                        "ring": "Trial"
+                    }
+                ]
+            }
+        };
+
+        // DOM Elements
+        const jsonInput = document.getElementById('jsonInput');
+        const sampleDataContainer = document.getElementById('sampleData');
+        const generateBtn = document.getElementById('generateBtn');
+        const showSampleBtn = document.getElementById('showSampleBtn');
+        const exportHtmlBtn = document.getElementById('exportHtmlBtn');
+        const exportMarkdownBtn = document.getElementById('exportMarkdownBtn');
+        const saveJsonBtn = document.getElementById('saveJsonBtn');
+        const loadJsonBtn = document.getElementById('loadJsonBtn');
+        const jsonFileInput = document.getElementById('jsonFileInput');
+        const renderedOutput = document.getElementById('renderedOutput');
+        const techRadarOutput = document.getElementById('techRadarOutput');
+        const assetRegistryOutput = document.getElementById('assetRegistryOutput');
+        const tabs = document.querySelectorAll('.tab');
+
+        // Show sample data
+        showSampleBtn.addEventListener('click', () => {
+            if (sampleDataContainer.classList.contains('hidden')) {
+                sampleDataContainer.textContent = JSON.stringify(sampleData, null, 2);
+                sampleDataContainer.classList.remove('hidden');
+                showSampleBtn.textContent = 'Hide Sample Data';
+            } else {
+                sampleDataContainer.classList.add('hidden');
+                showSampleBtn.textContent = 'Show Sample Data Format';
+            }
+        });
+
+        // Load sample data into editor
+        sampleDataContainer.addEventListener('click', () => {
+            jsonInput.value = JSON.stringify(sampleData, null, 2);
+        });
+
+        // Tab switching
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide all tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                
+                // Show selected tab content
+                const tabName = tab.getAttribute('data-tab');
+                if (tabName === 'roadmap') {
+                    renderedOutput.classList.remove('hidden');
+                } else if (tabName === 'techRadar') {
+                    techRadarOutput.classList.remove('hidden');
+                } else if (tabName === 'assetRegistry') {
+                    assetRegistryOutput.classList.remove('hidden');
+                }
+            });
+        });
+
+        // Generate Gantt Chart for Roadmap
+        function generateGanttChart(data) {
+            let ganttChart = 'gantt\n';
+            ganttChart += '    title Roadmap Timeline\n';
+            ganttChart += '    dateFormat YYYY-MM-DD\n';
+            ganttChart += '    axisFormat %b %Y\n\n';
+            
+            // Group projects by owner
+            const projectsByOwner = {};
+            
+            data.projects.forEach(project => {
+                if (!projectsByOwner[project.owner]) {
+                    projectsByOwner[project.owner] = [];
+                }
+                projectsByOwner[project.owner].push(project);
+            });
+            
+            // Add projects to gantt chart
+            for (const owner in projectsByOwner) {
+                ganttChart += `    section ${owner}\n`;
+                
+                projectsByOwner[owner].forEach(project => {
+                    const statusText = project.status === 'done' ? 'done' : 
+                                      project.status === 'active' ? 'active' : 'planned';
+                    
+                    ganttChart += `    ${project.name} :${statusText}, ${project.startDate}, ${project.endDate}\n`;
+                });
+                
+                ganttChart += '\n';
+            }
+            
+            return ganttChart;
+        }
+
+        // Generate Tech Radar
+        function generateTechRadar(data) {
+            let html = '<h2>Technology Radar</h2>';
+            
+            // Group by quadrant
+            const quadrantMap = {};
+            data.techRadar.quadrants.forEach(quadrant => {
+                quadrantMap[quadrant] = {
+                    'Adopt': [],
+                    'Trial': [],
+                    'Assess': [],
+                    'Hold': []
+                };
+            });
+            
+            // Populate the map
+            data.techRadar.items.forEach(item => {
+                if (quadrantMap[item.quadrant]) {
+                    quadrantMap[item.quadrant][item.ring].push(item.name);
+                }
+            });
+            
+            // Create HTML tables for each quadrant
+            for (const quadrant in quadrantMap) {
+                html += `<h3>${quadrant}</h3>`;
+                html += '<table>';
+                html += '<tr><th>Ring</th><th>Technologies</th></tr>';
+                
+                data.techRadar.rings.forEach(ring => {
+                    const technologies = quadrantMap[quadrant][ring].join(', ') || 'None';
+                    html += `<tr><td>${ring}</td><td>${technologies}</td></tr>`;
+                });
+                
+                html += '</table>';
+            }
+            
+            // Also create a radar diagram in Mermaid
+            html += '<div class="mermaid">\n';
+            html += 'pie showData\n';
+            
+            // Count technologies by ring
+            const ringCounts = {
+                'Adopt': 0,
+                'Trial': 0,
+                'Assess': 0,
+                'Hold': 0
+            };
+            
+            data.techRadar.items.forEach(item => {
+                ringCounts[item.ring]++;
+            });
+            
+            // Add to pie chart
+            for (const ring in ringCounts) {
+                html += `    "${ring}" : ${ringCounts[ring]}\n`;
+            }
+            
+            html += '</div>\n';
+            
+            return html;
+        }
+
+        // Generate Asset Registry
+        function generateAssetRegistry(data) {
+            let html = '<h2>Asset Registry</h2>';
+            
+            // Create a map of all technologies used in projects
+            const techMap = {};
+            
+            data.projects.forEach(project => {
+                project.technologies.forEach(tech => {
+                    if (!techMap[tech]) {
+                        techMap[tech] = {
+                            name: tech,
+                            projects: [],
+                            environments: new Set(),
+                            statuses: new Set()
+                        };
+                    }
+                    
+                    techMap[tech].projects.push(project.name);
+                    techMap[tech].environments.add(project.environment);
+                    techMap[tech].statuses.add(project.status);
+                });
+            });
+            
+            // Determine maturity level based on statuses and usage
+            for (const tech in techMap) {
+                const item = techMap[tech];
+                
+                // Convert sets to arrays for display
+                item.environments = Array.from(item.environments).join(', ');
+                
+                // Determine maturity based on project statuses
+                const statuses = Array.from(item.statuses);
+                
+                if (statuses.includes('done') && item.projects.length > 1) {
+                    item.maturity = 'Adopted';
+                } else if (statuses.includes('done') || statuses.includes('active')) {
+                    item.maturity = 'Trial';
+                } else if (statuses.includes('planned')) {
+                    item.maturity = 'Assessing';
+                } else {
+                    item.maturity = 'Unknown';
+                }
+                
+                // Get tech radar position if available
+                const radarItem = data.techRadar.items.find(ri => ri.name === tech);
+                if (radarItem) {
+                    item.quadrant = radarItem.quadrant;
+                    item.ring = radarItem.ring;
+                } else {
+                    item.quadrant = 'Not Classified';
+                    item.ring = 'Not Classified';
+                }
+            }
+            
+            // Create HTML table
+            html += '<table>';
+            html += '<tr><th>Technology</th><th>Quadrant</th><th>Maturity</th><th>Environments</th><th>Projects</th></tr>';
+            
+            Object.values(techMap).forEach(item => {
+                html += `<tr>
+                    <td>${item.name}</td>
+                    <td>${item.quadrant}</td>
+                    <td>${item.maturity}</td>
+                    <td>${item.environments}</td>
+                    <td>${item.projects.join(', ')}</td>
+                </tr>`;
+            });
+            
+            html += '</table>';
+            
+            return html;
+        }
+
+        // Generate complete roadmap
+        function generateRoadmap(jsonData) {
+            try {
+                const data = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;
+                
+                // Generate HTML for roadmap tab
+                let roadmapHtml = '<h2>Architecture Team Roadmap</h2>';
+                
+                // Add Gantt chart
+                roadmapHtml += '<div class="mermaid">\n';
+                roadmapHtml += generateGanttChart(data);
+                roadmapHtml += '</div>\n';
+                
+                // Add project table
+                roadmapHtml += '<h3>Project Details</h3>';
+                roadmapHtml += '<table>';
+                roadmapHtml += '<tr><th>Project</th><th>Owner</th><th>Status</th><th>Timeline</th><th>Technologies</th><th>Description</th></tr>';
+                
+                data.projects.forEach(project => {
+                    const statusClass = `status-${project.status}`;
+                    const timeline = `${formatDate(project.startDate)} to ${formatDate(project.endDate)}`;
+                    
+                    roadmapHtml += `<tr class="${statusClass}">
+                        <td>${project.name}</td>
+                        <td>${project.owner}</td>
+                        <td>${project.status}</td>
+                        <td>${timeline}</td>
+                        <td>${project.technologies.join(', ')}</td>
+                        <td>${project.description}</td>
+                    </tr>`;
+                });
+                
+                roadmapHtml += '</table>';
+                
+                // Generate Tech Radar
+                const techRadarHtml = generateTechRadar(data);
+                
+                // Generate Asset Registry
+                const assetRegistryHtml = generateAssetRegistry(data);
+                
+                // Update outputs
+                renderedOutput.innerHTML = roadmapHtml;
+                techRadarOutput.innerHTML = techRadarHtml;
+                assetRegistryOutput.innerHTML = assetRegistryHtml;
+                
+                // Re-render Mermaid diagrams
+                mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+                
+            } catch (error) {
+                renderedOutput.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                console.error('Error generating roadmap:', error);
+            }
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        // Generate visualizations button
+        generateBtn.addEventListener('click', () => {
+            const jsonData = jsonInput.value;
+            if (jsonData.trim() === '') {
+                alert('Please enter JSON data first.');
+                return;
+            }
+            
+            generateRoadmap(jsonData);
+        });
+
+        // Export as HTML
+        exportHtmlBtn.addEventListener('click', () => {
+            try {
+                const data = JSON.parse(jsonInput.value);
+                
+                // Generate all sections
+                const roadmapHtml = renderedOutput.innerHTML;
+                const techRadarHtml = techRadarOutput.innerHTML;
+                const assetRegistryHtml = assetRegistryOutput.innerHTML;
+                
+                // Create full HTML document
+                const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture Team Roadmap</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .status-done {
+            background-color: #d4edda;
+        }
+        .status-active {
+            background-color: #fff3cd;
+        }
+        .status-planned {
+            background-color: #d1ecf1;
+        }
+        .tab-container {
+            margin-top: 20px;
+        }
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .tab-button {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        .tab-button.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+        }
+        .tab-content {
+            display: none;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 0 5px 5px 5px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Architecture Team Roadmap</h1>
+        
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <div class="tab-button active" onclick="openTab(event, 'roadmap')">Roadmap</div>
+                <div class="tab-button" onclick="openTab(event, 'techRadar')">Tech Radar</div>
+                <div class="tab-button" onclick="openTab(event, 'assetRegistry')">Asset Registry</div>
+            </div>
+            
+            <div id="roadmap" class="tab-content active">
+                ${roadmapHtml}
+            </div>
+            
+            <div id="techRadar" class="tab-content">
+                ${techRadarHtml}
+            </div>
+            
+            <div id="assetRegistry" class="tab-content">
+                ${assetRegistryHtml}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        
+        // Tab switching function
+        function openTab(evt, tabName) {
+            // Hide all tab content
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.getElementsByClassName("tab-button");
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+            
+            // Show the selected tab content and add active class to the button
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>`;
+                
+                // Create download link
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'architecture-roadmap.html';
+                a.click();
+                
+                URL.revokeObjectURL(url);
+                
+            } catch (error) {
+                alert(`Error exporting HTML: ${error.message}`);
+                console.error('Error exporting HTML:', error);
+            }
+        });
+
+        // Export as Markdown
+        exportMarkdownBtn.addEventListener('click', () => {
+            try {
+                const data = JSON.parse(jsonInput.value);
+                
+                // Generate markdown content
+                let markdown = '# Architecture Team Roadmap\n\n';
+                
+                // Roadmap (Mermaid gantt)
+                markdown += '## Roadmap Timeline\n\n';
+                markdown += '```mermaid\n';
+                markdown += generateGanttChart(data);
+                markdown += '```\n\n';
+                
+                // Project details table
+                markdown += '## Project Details\n\n';
+                markdown += '| Project | Owner | Status | Timeline | Technologies | Description |\n';
+                markdown += '|---------|-------|--------|----------|--------------|-------------|\n';
+                
+                data.projects.forEach(project => {
+                    const timeline = `${project.startDate} to ${project.endDate}`;
+                    const technologies = project.technologies.join(', ');
+                    
+                    markdown += `| ${project.name} | ${project.owner} | ${project.status} | ${timeline} | ${technologies} | ${project.description} |\n`;
+                });
+                
+                markdown += '\n';
+                
+                // Tech Radar
+                markdown += '## Technology Radar\n\n';
+                
+                data.techRadar.quadrants.forEach(quadrant => {
+                    markdown += `### ${quadrant}\n\n`;
+                    markdown += '| Ring | Technologies |\n';
+                    markdown += '|------|-------------|\n';
+                    
+                    data.techRadar.rings.forEach(ring => {
+                        const technologies = data.techRadar.items
+                            .filter(item => item.quadrant === quadrant && item.ring === ring)
+                            .map(item => item.name)
+                            .join(', ');
+                        
+                        markdown += `| ${ring} | ${technologies || 'None'} |\n`;
+                    });
+                    
+                    markdown += '\n';
+                });
+                
+                // Asset Registry
+                markdown += '## Asset Registry\n\n';
+                markdown += '| Technology | Quadrant | Maturity | Environments | Projects |\n';
+                markdown += '|------------|----------|----------|--------------|----------|\n';
+                
+                // Create a map of all technologies
+                const techMap = {};
+                
+                data.projects.forEach(project => {
+                    project.technologies.forEach(tech => {
+                        if (!techMap[tech]) {
+                            techMap[tech] = {
+                                name: tech,
+                                projects: [],
+                                environments: new Set(),
+                                statuses: new Set()
+                            };
+                        }
+                        
+                        techMap[tech].projects.push(project.name);
+                        techMap[tech].environments.add(project.environment);
+                        techMap[tech].statuses.add(project.status);
+                    });
+                });
+                
+                // Determine maturity level and add to markdown
+                Object.values(techMap).forEach(item => {
+                    // Convert sets to arrays for display
+                    const environments = Array.from(item.environments).join(', ');
+                    const projects = item.projects.join(', ');
+                    
+                    // Determine maturity based on project statuses
+                    const statuses = Array.from(item.statuses);
+                    let maturity = 'Unknown';
+                    
+                    if (statuses.includes('done') && item.projects.length > 1) {
+                        maturity = 'Adopted';
+                    } else if (statuses.includes('done') || statuses.includes('active')) {
+                        maturity = 'Trial';
+                    } else if (statuses.includes('planned')) {
+                        maturity = 'Assessing';
+                    }
+                    
+                    // Get tech radar position if available
+                    const radarItem = data.techRadar.items.find(ri => ri.name === item.name);
+                    const quadrant = radarItem ? radarItem.quadrant : 'Not Classified';
+                    
+                    markdown += `| ${item.name} | ${quadrant} | ${maturity} | ${environments} | ${projects} |\n`;
+                });
+                
+                // Create download link
+                const blob = new Blob([markdown], { type: 'text/markdown' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'architecture-roadmap.md';
+                a.click();
+                
+                URL.revokeObjectURL(url);
+                
+            } catch (error) {
+                alert(`Error exporting Markdown: ${error.message}`);
+                console.error('Error exporting Markdown:', error);
+            }
+        });
+
+        // Save JSON data
+        saveJsonBtn.addEventListener('click', () => {
+            try {
+                const jsonData = jsonInput.value;
+                if (jsonData.trim() === '') {
+                    alert('Please enter JSON data first.');
+                    return;
+                }
+                
+                // Parse to check if valid JSON
+                JSON.parse(jsonData);
+                
+                // Create download link
+                const blob = new Blob([jsonData], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'roadmap-data.json';
+                a.click();
+                
+                URL.revokeObjectURL(url);
+                
+            } catch (error) {
+                alert(`Error saving JSON: ${error.message}`);
+                console.error('Error saving JSON:', error);
+            }
+        });
+
+        // Load JSON data
+        loadJsonBtn.addEventListener('click', () => {
+            jsonFileInput.click();
+        });
+        
+        jsonFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const content = e.target.result;
+                    // Parse to check if valid JSON
+                    JSON.parse(content);
+                    
+                    jsonInput.value = content;
+                    
+                } catch (error) {
+                    alert(`Error: Invalid JSON file: ${error.message}`);
+                    console.error('Error loading JSON:', error);
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // Initialize with sample data
+        jsonInput.value = JSON.stringify(sampleData, null, 2);
+    </script>
+</body>
+</html>
