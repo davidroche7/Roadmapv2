@@ -1,0 +1,38 @@
+name: Update Readme Roadmap
+
+on:
+  push:
+    paths:
+      - 'roadmap-data.json'
+  workflow_dispatch:
+
+jobs:
+  update-roadmap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          
+      - name: Generate Mermaid URL
+        run: |
+          # Get the current data
+          DATA=$(cat roadmap-data.json)
+          
+          # Create a URL to render the mermaid diagram using mermaid.ink
+          ENCODED_DATA=$(echo $DATA | jq -r @uri)
+          MERMAID_URL="https://mermaid.ink/img/eyJjb2RlIjoiZ2FudHRcbiAgICB0aXRsZSBBcmNoaXRlY3R1cmUgUm9hZG1hcCBUaW1lbGluZVxuICAgIGRhdGVGb3JtYXQgWVlZWS1NTS1ERFxuICAgIGF4aXNGb3JtYXQgJWIgJVlcblxuICAgIHNlY3Rpb24gU3RhbmxleVxuICAgICBXb3JrIG9iamVjdCAxIDphY3RpdmUsIDIwMjUtMDItMjEsIDIwMjUtMDktMjNcblxuICAgIHNlY3Rpb24gQWxhblxuICAgICBGZWF0dXJlIFggUmVkZXNpZ24gOmRvbmUsIDIwMjUtMDEtMDEsIDIwMjUtMDMtMDFcbiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19"
+          
+          # Update the README with the new URL
+          sed -i "s|https://mermaid.ink/img/.*|$MERMAID_URL)|" README.md
+          
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add README.md
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update roadmap in README"
+          git push
