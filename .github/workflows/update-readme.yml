@@ -126,7 +126,8 @@ jobs:
           echo "Generated Mermaid URL: $MERMAID_URL"
           
           # Update the README with the new URL
-          sed -i "s|https://mermaid.ink/img/.*type=png|$MERMAID_URL|" README.md
+          # Pattern matching with the specific type parameter
+          sed -i "s|https://mermaid.ink/img/.*?type=png|$MERMAID_URL|" README.md
       
       - name: Commit and push if changed
         run: |
