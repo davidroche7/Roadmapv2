@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Architecture Team Roadmap</title>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
     <style>
         body { 
             font-family: Arial, sans-serif; 
@@ -17,19 +16,6 @@
             max-width: 1200px; 
             margin: 0 auto;
             padding: 20px;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 20px 0;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
         }
         button {
             padding: 8px 12px;
@@ -45,6 +31,12 @@
             top: 10px;
             right: 10px;
         }
+        iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -54,72 +46,11 @@
         <h1>Architecture Team Roadmap 2025</h1>
         
         <div>
-            <button id="export-html">Export as HTML</button>
-            <button id="export-confluence">Export for Confluence</button>
+            <button onclick="window.location.href='roadmap-simple.html'">Export as HTML</button>
+            <button onclick="window.location.href='export-confluence.html'">Export for Confluence</button>
         </div>
         
-        <h2>Roadmap Timeline</h2>
-        <!-- Use a pre-rendered roadmap from the static file instead of trying to generate it dynamically -->
-        <iframe src="roadmap-simple.html" style="width:100%; height:800px; border:none;"></iframe>
-        
-        <div id="project-table">
-            <!-- Project table will be inserted here by JavaScript -->
-        </div>
+        <iframe src="roadmap-simple.html"></iframe>
     </div>
-
-    <script>
-        // Generate project table
-        function generateProjectTable(data) {
-            let html = '<h2>Project Details</h2>';
-            html += '<table>';
-            html += '<tr><th>Project</th><th>Architect</th><th>Type</th><th>Status</th><th>Start Date</th><th>End Date</th></tr>';
-            
-            data.forEach(project => {
-                html += `<tr>
-                    <td>${project.project_name || ''}</td>
-                    <td>${project.architect || ''}</td>
-                    <td>${project.type || ''}</td>
-                    <td>${project.status || ''}</td>
-                    <td>${project.start_date || ''}</td>
-                    <td>${project.end_date || ''}</td>
-                </tr>`;
-            });
-            
-            html += '</table>';
-            return html;
-        }
-        
-        // Load roadmap data
-        async function loadRoadmap() {
-            try {
-                const response = await fetch('roadmap-data.json');
-                if (!response.ok) {
-                    throw new Error('Failed to load roadmap data');
-                }
-                
-                const data = await response.json();
-                
-                // Generate and insert the project table
-                const projectTable = generateProjectTable(data);
-                document.getElementById('project-table').innerHTML = projectTable;
-                
-                // Set up export buttons
-                document.getElementById('export-html').addEventListener('click', () => {
-                    window.location.href = 'roadmap-simple.html';
-                });
-                
-                document.getElementById('export-confluence').addEventListener('click', () => {
-                    window.location.href = 'export-confluence.html';
-                });
-                
-            } catch (error) {
-                console.error('Error loading roadmap data:', error);
-                document.getElementById('project-table').innerHTML = `<div style="color: red;">Error loading roadmap data: ${error.message}</div>`;
-            }
-        }
-        
-        // Load roadmap when the page loads
-        document.addEventListener('DOMContentLoaded', loadRoadmap);
-    </script>
 </body>
 </html>
