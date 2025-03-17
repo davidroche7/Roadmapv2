@@ -9,16 +9,116 @@ This repository contains automation tools for the Architecture Team to maintain 
 
 ## 🛤️ Architecture Team Roadmap 2025
 
-![Roadmap Timeline](https://mermaid.ink/img/eyJjb2RlIjoiZ2FudHRcbiAgdGl0bGUgQXJjaGl0ZWN0dXJlIFJvYWRtYXAgVGltZWxpbmVcbiAgZGF0ZUZvcm1hdCBZWVlZLU1NLUREXG4gIGF4aXNGb3JtYXQgJWIgJVlcblxuICBzZWN0aW9uIEJ1c2luZXNzIENhc2VcbiAgICBBdXRvLXNjYWxpbmcgZm9yIEdhbWUgUGxhdGZvcm1zIChLZWl0aCkgOmFjdGl2ZSwgMjAyNS0wMy0wMSwgMjAyNS0wNS0zMFxuICBzZWN0aW9uIENsaWVudCBEZWxpdmVyeVxuICAgIFBHQ0IgUG9ydGFsIChUb2J5KSA6YWN0aXZlLCAyMDI1LTAzLTAxLCAyMDI1LTA2LTMwXG4gICAgVmVpa2thdXMgT0dTIEludGVncmF0aW9uIChLZWl0aCkgOmFjdGl2ZSwgMjAyNS0wMy0wMSwgMjAyNS0wNi0zMFxuICBzZWN0aW9uIENsaWVudCBSRlBcbiAgICBCQ0xDIFNvbHV0aW9uIERlc2lnbiAoVW5hc3NpZ25lZCkgOmFjdGl2ZSwgMjAyNS0wMy0wMSwgMjAyNS0wNi0wMVxuICAgIFZlaWtrYXVzIFBBTSAoVG9ieSwgQWNoaWxsZWFzLCBFcmlrKSA6YWN0aXZlLCAyMDI1LTAzLTAxLCAyMDI1LTA1LTAxXG4gIHNlY3Rpb24gSW50ZXJuYWwgRW5naW5lZXJpbmdcbiAgICBBSSBDaGF0Ym90IChBbGJpbikgOmFjdGl2ZSwgMjAyNS0wMy0wMSwgMjAyNS0wNy0wMVxuICBzZWN0aW9uIExlYW4gV29ya3Nob3AgT3V0cHV0XG4gICAgU2VwYXJhdGlvbiBvZiBFbnZpcm9ubWVudHMgKE1hcmspIDphY3RpdmUsIDIwMjUtMDMtMDEsIDIwMjUtMDctMDFcbiAgICBDb25zb2xpZGF0ZWQgR2FtZSBTdGF0dXMgRGFzaGJvYXJkIChVbmFzc2lnbmVkKSA6cGxhbm5lZCwgMjAyNS0wNC0wMSwgMjAyNS0wNy0wMVxuICAgIENvbXBsaWFuY2UgQ2hlY2tpbmcgKFVuYXNzaWduZWQpIDpwbGFubmVkLCAyMDI1LTA0LTAxLCAyMDI1LTA3LTAxXG4gIHNlY3Rpb24gUHJvZHVjdFxuICAgIEl0YWxpYW4gQ2hlY2t1bSBQcm9qZWN0IChNYXJrKSA6YWN0aXZlLCAyMDI1LTAzLTE1LCAyMDI1LTA2LTE1XG4gICAgRnJlZTJwbGF5IChTYW0pIDphY3RpdmUsIDIwMjUtMDMtMTUsIDIwMjUtMDktMTVcbiAgICBEYXRhSHViIFBoYXNlIDMgKEFsYmluKSA6YWN0aXZlLCAyMDI1LTAzLTAxLCAyMDI1LTA1LTAxXG4gICAgR0NNIE5ldyBSZWxpYyBEZXZlbG9wbWVudCAoU2FtKSA6YWN0aXZlLCAyMDI1LTAzLTE1LCAyMDI1LTA3LTE1XG4gICAgUkdTIExpZ2h0IFJvbGxvdXQgKEFsYmluKSA6cGxhbm5lZCwgMjAyNS0wMy0xNSwgMjAyNS0wNi0zMFxuICAgIEdDTSBJbnRlZ3JhdGlvbiBJbXByb3ZlbWVudHMgKFNhbSkgOmFjdGl2ZSwgMjAyNS0wMy0xNSwgMjAyNS0wNi0xNVxuICBzZWN0aW9uIFByb2R1Y3QgRGV2ZWxvcG1lbnRcbiAgICBQcm9qZWN0IE5vdmEgKEFjaGlsbGVhcywgRXJpaywgVG9ieSkgOmFjdGl2ZSwgMjAyNS0wMy0wMSwgMjAyNS0wOS0wMVxuICBzZWN0aW9uIFByb29mIG9mIENvbmNlcHRcbiAgICBBdXRoMCBTQVBJIFBvQyAoTWFyaykgOmFjdGl2ZSwgMjAyNS0wMy0wMSwgMjAyNS0wNC0wMVxuICBzZWN0aW9uIFRlY2hub2xvZ3lcbiAgICBBUEkgR2F0ZXdheSBJbXBsZW1lbnRhdGlvbiAoQWxiaW4sIE1hcmspIDphY3RpdmUsIDIwMjUtMDMtMDEsIDIwMjUtMDQtMTVcbiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19?type=png)
-
 > **View interactive roadmap**: [Architecture Roadmap](https://davidroche7.github.io/Roadmapv2/)
 >
 > **Download formats**: [HTML](https://davidroche7.github.io/Roadmapv2/roadmap-simple.html) | [Confluence Markup](https://davidroche7.github.io/Roadmapv2/export-confluence.html)
 
-## How It Works
-1. Edit the `roadmap-data.json` file to update the roadmap data
-2. The roadmap image above is automatically updated via GitHub Actions
-3. For interactive features, use the GitHub Pages site
+## Current Implementation
 
-## System Overview
-This automation system keeps the roadmap above in sync with our Monday.com board and connects it to our existing Tech Radar and a new Asset Registry.
+The current implementation provides a client-side rendered roadmap based on JSON data:
+
+1. **Core Data Source**: `roadmap-data.json` contains all project information
+2. **HTML Views**:
+   - `index.html` - Main page that embeds the roadmap
+   - `roadmap-simple.html` - Standalone roadmap with Gantt chart and table
+   - `export-confluence.html` - Confluence markup exporter
+
+### How It Works
+1. Edit the `roadmap-data.json` file to update the roadmap data
+2. The HTML files read this JSON data and render it dynamically in the browser
+3. No build process or server-side rendering required
+
+### Current Features
+- Interactive Gantt chart showing project timelines
+- Detailed project table with all metadata
+- Export to CSV functionality
+- Confluence markup export
+- Responsive design with improved formatting
+
+## Future Plans
+
+This is a simplified version of a more comprehensive system planned for the future. The complete system will include:
+
+```mermaid
+graph TD
+    A[Monday.com] -->|Daily sync| B[GitHub Actions]
+    B -->|Updates| C[Roadmap]
+    B -->|Updates| D[Tech Radar]
+    B -->|Updates| E[Asset Registry]
+    C -->|Published to| F[Confluence]
+    D -->|Published to| F
+    E -->|Published to| F
+    G[Confluence Pages] -->|Asset info| E
+```
+
+## Planned Components
+
+### 1. Roadmap
+The roadmap (currently implemented) displays architecture team activities organized by team member. It includes:
+ - Project/product name
+ - Status (done, active, planned)
+ - Timeline (start and end dates)
+
+### 2. Technology Radar
+We plan to use the existing company Tech Radar and automatically update it with technologies from our projects. The automation will:
+ - Extract technologies from Monday.com projects and confluence
+ - Format them for the Tech Radar
+ - Push updates to the Tech Radar repository
+
+### 3. Asset Registry
+The planned asset registry will provide a comprehensive inventory of all technology assets with:
+ - Technology name and type
+ - Maturity level within the organisation
+ - Projects using the technology
+ - Links to documentation in Confluence
+
+## Prerequisites for Future Implementation
+
+### Monday.com Setup
+A Monday.com board with the following columns:
+ - Technologies (tags/multiple values)
+ - Status (status column)
+ - Owner (person column)
+ - Start Date (date column)
+ - End Date (date column)
+ - Monday.com API token with read access to the board
+
+### Confluence Setup
+A Confluence space where documentation will be published:
+ - Architecture Team Roadmap
+ - Technology Radar
+ - Asset Registry
+ - Confluence API credentials with write access to these pages
+
+### GitHub Setup
+ - Repository secrets configured with API credentials
+
+## Planned Configuration
+ - All configuration settings will be stored in `config.json`:
+ - Monday.com board and column IDs
+ - Confluence space and page IDs
+ - Tech Radar quadrant and ring definitions
+
+## How It Will Work
+ - GitHub Actions workflow will run daily to fetch data from Monday.com
+ - The data will be processed to update the roadmap
+ - Technologies mentioned in projects will be extracted for the Tech Radar
+ - The Asset Registry will be compiled from Tech Radar data and Confluence
+ - All visualizations will be published to Confluence for wider access
+
+## Adding New Projects (Future)
+To add a new project to the system:
+ - Add a new item to the Monday.com board
+ - Fill in all required columns (technologies, status, owner, dates)
+ - The automation will include the new project in the next update
+
+## Maturity Levels for Technology (TBC)
+Technology maturity will be determined automatically based on:
+ - Adoption across projects
+ - Status of projects using the technology
+
+The levels are:
+ - Adopted: Technology is widely used and proven
+ - Trial: Technology is being used in limited projects
+ - Assessing: Technology is being evaluated
+ - Unknown: Maturity level not determined
