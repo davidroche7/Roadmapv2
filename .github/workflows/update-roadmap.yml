@@ -1,0 +1,32 @@
+name: Update Roadmap Files
+
+on:
+  push:
+    paths:
+      - 'roadmap-data.json'
+  workflow_dispatch:  # For manual triggering
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Generate roadmap files
+      run: |
+        python roadmap_generator.py
+        python fix_index.py
+      
+    - name: Commit and push changes
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'github-actions@github.com'
+        git add index.html roadmap-simple.html export-confluence.html
+        git diff --quiet && git diff --staged --quiet || git commit -m "Update roadmap files based on JSON changes"
+        git push
