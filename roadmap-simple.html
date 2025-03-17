@@ -6,223 +6,239 @@
     <title>Architecture Roadmap</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }
-        th { background-color: #f2f2f2; }
-        .mermaid { margin: 20px 0; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            color: #333;
+        }
+        h1, h2 { 
+            color: #333;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin: 20px 0; 
+            overflow-x: auto;
+            display: block;
+        }
+        th, td { 
+            padding: 10px; 
+            text-align: left; 
+            border: 1px solid #ddd; 
+        }
+        th { 
+            background-color: #f2f2f2; 
+            position: sticky;
+            top: 0;
+        }
+        .export-btn { 
+            padding: 8px 12px; 
+            background-color: #4CAF50; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            margin: 10px 5px 10px 0; 
+        }
+        .mermaid-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        .table-container {
+            margin: 20px 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
     </style>
 </head>
 <body>
     <h1>Architecture Roadmap</h1>
     
+    <div>
+        <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+        <button class="export-btn" onclick="window.location.href='export-confluence.html'">Export for Confluence</button>
+    </div>
+    
     <h2>Roadmap Timeline</h2>
-    <div class="mermaid">
-gantt
-  title Architecture Roadmap Timeline
-  dateFormat YYYY-MM-DD
-  axisFormat %b %Y
-
-  section Business Case
-    Auto-scaling for Game Platforms (Keith) :active, 2025-03-01, 2025-05-30
-
-  section Client Delivery
-    PGCB Portal (Toby) :active, 2025-03-01, 2025-06-30
-    Veikkaus OGS Integration (Keith) :active, 2025-03-01, 2025-06-30
-
-  section Client RFP
-    BCLC Solution Design (Unassigned) :active, 2025-03-01, 2025-06-01
-    Veikkaus PAM (Toby, Achilleas, Erik) :active, 2025-03-01, 2025-05-01
-
-  section Infrastructure
-    Lean Workshop Project (Mark) :active, 2025-03-01, 2025-07-01
-
-  section Internal Engineering
-    AI Chatbot (Albin) :active, 2025-03-01, 2025-07-01
-
-  section Lean Workshop Output
-    Consolidated Game Status Dashboard (Unassigned) :planned, 2025-04-01, 2025-07-01
-    Compliance Checking (Unassigned) :planned, 2025-04-01, 2025-07-01
-
-  section Product
-    Italian Checkum Project (Mark) :active, 2025-03-15, 2025-06-15
-    Free2play (Sam) :active, 2025-03-15, 2025-09-15
-    DataHub Phase 3 (Albin) :active, 2025-03-01, 2025-05-01
-    GCM New Relic Development (Sam) :active, 2025-03-15, 2025-07-15
-    RGS Light Rollout (Albin) :planned, 2025-03-15, 2025-06-30
-    GCM Integration Improvements (Sam) :active, 2025-03-15, 2025-06-15
-
-  section Product Development
-    Project Nova (Achilleas, Erik, Toby) :active, 2025-03-01, 2025-09-01
-
-  section Proof of Concept
-    Auth0 SAPI PoC (Mark) :active, 2025-03-01, 2025-04-01
-
-  section Technology
-    API Gateway Implementation (Albin, Mark) :active, 2025-03-01, 2025-04-15
+    <div class="mermaid-container">
+        <div id="mermaid-chart"></div>
     </div>
     
     <h2>Project Details</h2>
-    <table>
-        <tr>
-            <th>Project</th>
-            <th>Architect</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-        </tr>
-        <tr>
-            <td>Lean Workshop Project</td>
-            <td>Mark</td>
-            <td>Infrastructure</td>
-            <td>In Progress</td>
-            <td>2025-03-01</td>
-            <td>2025-07-01</td>
-        </tr>
-        <tr>
-            <td>API Gateway Implementation</td>
-            <td>Albin, Mark</td>
-            <td>Technology</td>
-            <td>Commercial</td>
-            <td>2025-03-01</td>
-            <td>2025-04-15</td>
-        </tr>
-        <tr>
-            <td>Auth0 SAPI PoC</td>
-            <td>Mark</td>
-            <td>Proof of Concept</td>
-            <td>In Progress</td>
-            <td>2025-03-01</td>
-            <td>2025-04-01</td>
-        </tr>
-        <tr>
-            <td>Project Nova</td>
-            <td>Achilleas, Erik, Toby</td>
-            <td>Product Development</td>
-            <td>In Progress</td>
-            <td>2025-03-01</td>
-            <td>2025-09-01</td>
-        </tr>
-        <tr>
-            <td>Italian Checkum Project</td>
-            <td>Mark</td>
-            <td>Product</td>
-            <td>Stage Gate 0</td>
-            <td>2025-03-15</td>
-            <td>2025-06-15</td>
-        </tr>
-        <tr>
-            <td>Free2play</td>
-            <td>Sam</td>
-            <td>Product</td>
-            <td>Stage Gate 1</td>
-            <td>2025-03-15</td>
-            <td>2025-09-15</td>
-        </tr>
-        <tr>
-            <td>DataHub Phase 3</td>
-            <td>Albin</td>
-            <td>Product</td>
-            <td>Stage Gate 2</td>
-            <td>2025-03-01</td>
-            <td>2025-05-01</td>
-        </tr>
-        <tr>
-            <td>PGCB Portal</td>
-            <td>Toby</td>
-            <td>Client Delivery</td>
-            <td>Requirements Gathering</td>
-            <td>2025-03-01</td>
-            <td>2025-06-30</td>
-        </tr>
-        <tr>
-            <td>BCLC Solution Design</td>
-            <td>Unassigned</td>
-            <td>Client RFP</td>
-            <td>Requirements Gathering</td>
-            <td>2025-03-01</td>
-            <td>2025-06-01</td>
-        </tr>
-        <tr>
-            <td>Veikkaus OGS Integration</td>
-            <td>Keith</td>
-            <td>Client Delivery</td>
-            <td>In Progress</td>
-            <td>2025-03-01</td>
-            <td>2025-06-30</td>
-        </tr>
-        <tr>
-            <td>GCM New Relic Development</td>
-            <td>Sam</td>
-            <td>Product</td>
-            <td>Stage Gate 1</td>
-            <td>2025-03-15</td>
-            <td>2025-07-15</td>
-        </tr>
-        <tr>
-            <td>Veikkaus PAM</td>
-            <td>Toby, Achilleas, Erik</td>
-            <td>Client RFP</td>
-            <td>Awaiting Response</td>
-            <td>2025-03-01</td>
-            <td>2025-05-01</td>
-        </tr>
-        <tr>
-            <td>RGS Light Rollout</td>
-            <td>Albin</td>
-            <td>Product</td>
-            <td>Planned</td>
-            <td>2025-03-15</td>
-            <td>2025-06-30</td>
-        </tr>
-        <tr>
-            <td>Auto-scaling for Game Platforms</td>
-            <td>Keith</td>
-            <td>Business Case</td>
-            <td>Analysis</td>
-            <td>2025-03-01</td>
-            <td>2025-05-30</td>
-        </tr>
-        <tr>
-            <td>GCM Integration Improvements</td>
-            <td>Sam</td>
-            <td>Product</td>
-            <td>Stage Gate 1</td>
-            <td>2025-03-15</td>
-            <td>2025-06-15</td>
-        </tr>
-        <tr>
-            <td>Consolidated Game Status Dashboard</td>
-            <td>Unassigned</td>
-            <td>Lean Workshop Output</td>
-            <td>Planned</td>
-            <td>2025-04-01</td>
-            <td>2025-07-01</td>
-        </tr>
-        <tr>
-            <td>Compliance Checking</td>
-            <td>Unassigned</td>
-            <td>Lean Workshop Output</td>
-            <td>Planned</td>
-            <td>2025-04-01</td>
-            <td>2025-07-01</td>
-        </tr>
-        <tr>
-            <td>AI Chatbot</td>
-            <td>Albin</td>
-            <td>Internal Engineering</td>
-            <td>Demo</td>
-            <td>2025-03-01</td>
-            <td>2025-07-01</td>
-        </tr>
-    </table>
-    
+    <div class="table-container">
+        <table id="project-table">
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Architect</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Description</th>
+                    <th>Technologies</th>
+                </tr>
+            </thead>
+            <tbody id="project-table-body">
+                <!-- Table content will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
     <script>
-        mermaid.initialize({ 
+        // Initialize Mermaid
+        mermaid.initialize({
             startOnLoad: true,
-            securityLevel: 'loose'
+            securityLevel: 'loose',
+            gantt: {
+                barHeight: 20,
+                barGap: 4,
+                topPadding: 50,
+                leftPadding: 150,
+                rightPadding: 20,
+                fontFamily: 'Arial, sans-serif',
+                fontSize: 12
+            }
         });
+
+        // Function to sort and group projects by type
+        function sortProjectsByType(projects) {
+            const groupedProjects = {};
+            
+            // Group projects by type
+            projects.forEach(project => {
+                if (!groupedProjects[project.type]) {
+                    groupedProjects[project.type] = [];
+                }
+                groupedProjects[project.type].push(project);
+            });
+            
+            // Sort projects within each type by start date
+            Object.keys(groupedProjects).forEach(type => {
+                groupedProjects[type].sort((a, b) => {
+                    return new Date(a.start_date) - new Date(b.start_date);
+                });
+            });
+            
+            return groupedProjects;
+        }
+
+        // Generate Mermaid Gantt Chart
+        function generateMermaidChart(projects) {
+            const groupedProjects = sortProjectsByType(projects);
+            
+            let mermaidCode = `gantt
+  title Architecture Roadmap Timeline
+  dateFormat YYYY-MM-DD
+  axisFormat %b %Y
+`;
+
+            Object.keys(groupedProjects).forEach(type => {
+                mermaidCode += `\n  section ${type}\n`;
+                
+                groupedProjects[type].forEach(project => {
+                    const status = project.status === 'Planned' ? 'planned' : 'active';
+                    // Escape special characters that might cause issues
+                    const projectName = project.project_name.replace(/:/g, " -").replace(/[#,]/g, " ");
+                    const architect = project.architect.replace(/:/g, " -").replace(/[#,]/g, " ");
+                    
+                    mermaidCode += `    ${projectName} (${architect}) :${status}, ${project.start_date}, ${project.end_date}\n`;
+                });
+            });
+            
+            return mermaidCode;
+        }
+
+        // Generate HTML Table
+        function generateProjectTable(projects) {
+            const tableBody = document.getElementById('project-table-body');
+            tableBody.innerHTML = ''; // Clear existing content
+            
+            projects.forEach(project => {
+                const row = document.createElement('tr');
+                
+                // Add cells with project data
+                row.innerHTML = `
+                    <td>${project.project_name || ''}</td>
+                    <td>${project.architect || ''}</td>
+                    <td>${project.type || ''}</td>
+                    <td>${project.status || ''}</td>
+                    <td>${project.start_date || ''}</td>
+                    <td>${project.end_date || ''}</td>
+                    <td>${project.description || ''}</td>
+                    <td>${(project.technologies || []).join(', ')}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Export table data to CSV
+        function exportToCSV() {
+            const table = document.getElementById('project-table');
+            let csv = [];
+            
+            // Add header row
+            const headerRow = [];
+            const headers = table.querySelectorAll('th');
+            headers.forEach(header => {
+                headerRow.push(`"${header.textContent}"`);
+            });
+            csv.push(headerRow.join(','));
+            
+            // Add data rows
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const rowData = [];
+                const cells = row.querySelectorAll('td');
+                cells.forEach(cell => {
+                    rowData.push(`"${cell.textContent.replace(/"/g, '""')}"`);
+                });
+                csv.push(rowData.join(','));
+            });
+            
+            // Create and trigger download
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'architecture_roadmap.csv';
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Load the roadmap data and render
+        async function loadRoadmap() {
+            try {
+                const response = await fetch('roadmap-data.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load roadmap data');
+                }
+                
+                const projects = await response.json();
+                
+                // Generate and render Mermaid chart
+                const mermaidCode = generateMermaidChart(projects);
+                document.getElementById('mermaid-chart').innerHTML = `<div class="mermaid">${mermaidCode}</div>`;
+                mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+                
+                // Generate and render project table
+                generateProjectTable(projects);
+                
+            } catch (error) {
+                console.error('Error loading roadmap data:', error);
+                document.getElementById('mermaid-chart').innerHTML = `<div style="color: red;">Error loading roadmap data: ${error.message}</div>`;
+            }
+        }
+
+        // Initialize when the document is ready
+        document.addEventListener('DOMContentLoaded', loadRoadmap);
     </script>
 </body>
 </html>
