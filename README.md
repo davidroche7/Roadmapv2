@@ -9,7 +9,9 @@ This repository contains automation tools for the Architecture Team to maintain 
 
 ## 🛤️ Architecture Team Roadmap 2025
 
-> **View interactive roadmap**: [Architecture Roadmap](https://davidroche7.github.io/Roadmapv2/)
+<img src="https://mermaid.ink/img/pako:eNptUcFOAjEQ_ZWm50UNoJCDJpoj4V_0Mmx3dDeW7kw6LYnhb-Vb_BhndwsiYS87M--9ee9t-miVYyTyasf0oFwsz5QZ4zy1-PBcKGvdTieFOBXVh6s6wqEuMcfbDN-B8KRCb9UHBgkMkfFuYWZWDhvKfuSEWZgqnNsKE6w8hR-XG23jDRRUdkbfm8oE5uQoAqcyjVNuFbWYUJCx6Vl1GgOWKGGF683QoAYuLYVArYSfN4WsTlL21DTgz4mCpYrWFG5fzTpPIr4zpJ9JJ2KyO-yMSXAZsFEbWMSKFyNl-b6bjsS0Vm2jrsjpJ5ooLx17I-bXzZeQcZK_rnlYJ57SzfcO38yZvKKxFHeMdDptSWpOL80AO1UcIHrr7wdNNFM9X8GDmrm94OwZqSxnV2jnSy7E1Wo05rcn8hEHuF7C2OwxOxbO7MG8oPesI91Q0bF4SkbFON7_AXbHmRk" width="100%" alt="Architecture Roadmap Timeline">
+
+> **View full roadmap**: [Architecture Roadmap](https://davidroche7.github.io/Roadmapv2/)
 >
 > **Download formats**: [HTML](https://davidroche7.github.io/Roadmapv2/roadmap-simple.html) | [Confluence Markup](https://davidroche7.github.io/Roadmapv2/export-confluence.html)
 
@@ -29,7 +31,7 @@ The current implementation provides a client-side rendered roadmap based on JSON
 3. No build process or server-side rendering required
 
 ### Current Features
-- Interactive Gantt chart showing project timelines
+- Gantt chart showing project timelines
 - Detailed project table with all metadata
 - Export to CSV functionality
 - Confluence markup export
