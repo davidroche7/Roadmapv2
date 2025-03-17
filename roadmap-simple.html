@@ -53,14 +53,19 @@
         tr:hover {
             background-color: #f1f1f1;
         }
+        .standalone-only {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <h1>Architecture Roadmap</h1>
-    
-    <div>
-        <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
-        <button class="export-btn" onclick="window.location.href='export-confluence.html'">Export for Confluence</button>
+    <div class="standalone-only">
+        <h1>Architecture Roadmap</h1>
+        
+        <div>
+            <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+            <button class="export-btn" onclick="window.location.href='export-confluence.html'">Export for Confluence</button>
+        </div>
     </div>
     
     <h2>Roadmap Timeline</h2>
@@ -90,6 +95,17 @@
     </div>
 
     <script>
+        // Check if this page is being embedded
+        const urlParams = new URLSearchParams(window.location.search);
+        const isEmbedded = urlParams.get('embedded') === 'true';
+        
+        // Show standalone elements if not embedded
+        if (!isEmbedded) {
+            document.querySelectorAll('.standalone-only').forEach(el => {
+                el.style.display = 'block';
+            });
+        }
+        
         // Initialize Mermaid
         mermaid.initialize({
             startOnLoad: true,
@@ -177,8 +193,8 @@
             });
         }
 
-        // Export table data to CSV
-        function exportToCSV() {
+        // Export table data to CSV - Make this globally accessible for the parent frame
+        window.exportToCSV = function() {
             const table = document.getElementById('project-table');
             let csv = [];
             
@@ -211,7 +227,7 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        }
+        };
 
         // Load the roadmap data and render
         async function loadRoadmap() {
