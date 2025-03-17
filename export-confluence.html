@@ -5,9 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confluence Markup Export</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        pre { white-space: pre-wrap; font-family: monospace; margin: 20px; padding: 15px; background-color: #f5f5f5; border: 1px solid #ddd; }
-        button { margin: 20px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+        }
+        pre { 
+            white-space: pre-wrap; 
+            font-family: monospace; 
+            margin: 20px; 
+            padding: 15px; 
+            background-color: #f5f5f5; 
+            border: 1px solid #ddd; 
+        }
+        button { 
+            margin: 20px; 
+            padding: 10px; 
+            background-color: #4CAF50; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+        }
+        #loading {
+            margin: 20px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -15,87 +37,121 @@
     
     <button onclick="copyToClipboard()">Copy to Clipboard</button>
     
-    <pre id="confluence-content">h1. Architecture Roadmap
+    <div id="loading">Loading roadmap data...</div>
+    <pre id="confluence-content"></pre>
+    
+    <script>
+        // Function to sort and group projects by type
+        function sortProjectsByType(projects) {
+            const groupedProjects = {};
+            
+            // Group projects by type
+            projects.forEach(project => {
+                if (!groupedProjects[project.type]) {
+                    groupedProjects[project.type] = [];
+                }
+                groupedProjects[project.type].push(project);
+            });
+            
+            // Sort projects within each type by start date
+            Object.keys(groupedProjects).forEach(type => {
+                groupedProjects[type].sort((a, b) => {
+                    return new Date(a.start_date) - new Date(b.start_date);
+                });
+            });
+            
+            return groupedProjects;
+        }
+
+        // Generate Mermaid diagram for Confluence
+        function generateMermaidDiagram(projects) {
+            const groupedProjects = sortProjectsByType(projects);
+            
+            let mermaidCode = `gantt
+  title Architecture Roadmap Timeline
+  dateFormat YYYY-MM-DD
+  axisFormat %b %Y
+`;
+
+            Object.keys(groupedProjects).forEach(type => {
+                mermaidCode += `\n  section ${type}\n`;
+                
+                groupedProjects[type].forEach(project => {
+                    const status = project.status === 'Planned' ? 'planned' : 'active';
+                    // Escape special characters
+                    const projectName = project.project_name.replace(/:/g, " -").replace(/[#,]/g, " ");
+                    const architect = project.architect.replace(/:/g, " -").replace(/[#,]/g, " ");
+                    
+                    mermaidCode += `    ${projectName} (${architect}) :${status}, ${project.start_date}, ${project.end_date}\n`;
+                });
+            });
+            
+            return mermaidCode;
+        }
+
+        // Generate project table markup for Confluence
+        function generateTableMarkup(projects) {
+            let tableMarkup = '||Project||Architect||Type||Status||Start Date||End Date||Description||Technologies||\n';
+            
+            projects.forEach(project => {
+                const technologies = (project.technologies || []).join(', ');
+                tableMarkup += `|${project.project_name || ''}|${project.architect || ''}|${project.type || ''}|${project.status || ''}|${project.start_date || ''}|${project.end_date || ''}|${project.description || ''}|${technologies}|\n`;
+            });
+            
+            return tableMarkup;
+        }
+
+        // Generate complete Confluence markup
+        function generateConfluenceMarkup(projects) {
+            const mermaidDiagram = generateMermaidDiagram(projects);
+            const tableMarkup = generateTableMarkup(projects);
+            
+            return `h1. Architecture Roadmap
 
 h2. Roadmap Timeline
 
 {code:language=mermaid}
-gantt
-  title Architecture Roadmap Timeline
-  dateFormat YYYY-MM-DD
-  axisFormat %b %Y
-
-  section Business Case
-    Auto-scaling for Game Platforms (Keith) :active, 2025-03-01, 2025-05-30
-
-  section Client Delivery
-    PGCB Portal (Toby) :active, 2025-03-01, 2025-06-30
-    Veikkaus OGS Integration (Keith) :active, 2025-03-01, 2025-06-30
-
-  section Client RFP
-    BCLC Solution Design (Unassigned) :active, 2025-03-01, 2025-06-01
-    Veikkaus PAM (Toby, Achilleas, Erik) :active, 2025-03-01, 2025-05-01
-
-  section Infrastructure
-    Lean Workshop Project (Mark) :active, 2025-03-01, 2025-07-01
-
-  section Internal Engineering
-    AI Chatbot (Albin) :active, 2025-03-01, 2025-07-01
-
-  section Lean Workshop Output
-    Consolidated Game Status Dashboard (Unassigned) :planned, 2025-04-01, 2025-07-01
-    Compliance Checking (Unassigned) :planned, 2025-04-01, 2025-07-01
-
-  section Product
-    Italian Checkum Project (Mark) :active, 2025-03-15, 2025-06-15
-    Free2play (Sam) :active, 2025-03-15, 2025-09-15
-    DataHub Phase 3 (Albin) :active, 2025-03-01, 2025-05-01
-    GCM New Relic Development (Sam) :active, 2025-03-15, 2025-07-15
-    RGS Light Rollout (Albin) :planned, 2025-03-15, 2025-06-30
-    GCM Integration Improvements (Sam) :active, 2025-03-15, 2025-06-15
-
-  section Product Development
-    Project Nova (Achilleas, Erik, Toby) :active, 2025-03-01, 2025-09-01
-
-  section Proof of Concept
-    Auth0 SAPI PoC (Mark) :active, 2025-03-01, 2025-04-01
-
-  section Technology
-    API Gateway Implementation (Albin, Mark) :active, 2025-03-01, 2025-04-15
+${mermaidDiagram}
 {code}
 
 h2. Project Details
 
-||Project||Architect||Type||Status||Start Date||End Date||
-|Lean Workshop Project|Mark|Infrastructure|In Progress|2025-03-01|2025-07-01|
-|API Gateway Implementation|Albin, Mark|Technology|Commercial|2025-03-01|2025-04-15|
-|Auth0 SAPI PoC|Mark|Proof of Concept|In Progress|2025-03-01|2025-04-01|
-|Project Nova|Achilleas, Erik, Toby|Product Development|In Progress|2025-03-01|2025-09-01|
-|Italian Checkum Project|Mark|Product|Stage Gate 0|2025-03-15|2025-06-15|
-|Free2play|Sam|Product|Stage Gate 1|2025-03-15|2025-09-15|
-|DataHub Phase 3|Albin|Product|Stage Gate 2|2025-03-01|2025-05-01|
-|PGCB Portal|Toby|Client Delivery|Requirements Gathering|2025-03-01|2025-06-30|
-|BCLC Solution Design|Unassigned|Client RFP|Requirements Gathering|2025-03-01|2025-06-01|
-|Veikkaus OGS Integration|Keith|Client Delivery|In Progress|2025-03-01|2025-06-30|
-|GCM New Relic Development|Sam|Product|Stage Gate 1|2025-03-15|2025-07-15|
-|Veikkaus PAM|Toby, Achilleas, Erik|Client RFP|Awaiting Response|2025-03-01|2025-05-01|
-|RGS Light Rollout|Albin|Product|Planned|2025-03-15|2025-06-30|
-|Auto-scaling for Game Platforms|Keith|Business Case|Analysis|2025-03-01|2025-05-30|
-|GCM Integration Improvements|Sam|Product|Stage Gate 1|2025-03-15|2025-06-15|
-|Consolidated Game Status Dashboard|Unassigned|Lean Workshop Output|Planned|2025-04-01|2025-07-01|
-|Compliance Checking|Unassigned|Lean Workshop Output|Planned|2025-04-01|2025-07-01|
-|AI Chatbot|Albin|Internal Engineering|Demo|2025-03-01|2025-07-01|
-</pre>
-    
-    <script>
+${tableMarkup}`;
+        }
+
+        // Load roadmap data and generate Confluence markup
+        async function loadRoadmap() {
+            try {
+                const response = await fetch('roadmap-data.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load roadmap data');
+                }
+                
+                const projects = await response.json();
+                const confluenceMarkup = generateConfluenceMarkup(projects);
+                
+                document.getElementById('confluence-content').textContent = confluenceMarkup;
+                document.getElementById('loading').style.display = 'none';
+                
+            } catch (error) {
+                console.error('Error loading roadmap data:', error);
+                document.getElementById('loading').textContent = `Error loading roadmap data: ${error.message}`;
+            }
+        }
+
+        // Copy content to clipboard
         function copyToClipboard() {
             const content = document.getElementById('confluence-content').textContent;
             navigator.clipboard.writeText(content).then(() => {
                 alert('Copied to clipboard');
             }).catch(err => {
                 console.error('Failed to copy: ', err);
+                alert('Failed to copy. Please select the text manually and copy it.');
             });
         }
+
+        // Initialize when the document is ready
+        document.addEventListener('DOMContentLoaded', loadRoadmap);
     </script>
 </body>
 </html>
