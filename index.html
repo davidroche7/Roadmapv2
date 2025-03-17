@@ -48,9 +48,10 @@
         <div>
             <button onclick="window.location.href='roadmap-simple.html'">Export as HTML</button>
             <button onclick="window.location.href='export-confluence.html'">Export for Confluence</button>
+            <button onclick="document.getElementById('roadmap-frame').contentWindow.exportToCSV()">Export to CSV</button>
         </div>
         
-        <iframe src="roadmap-simple.html"></iframe>
+        <iframe id="roadmap-frame" src="roadmap-simple.html?embedded=true"></iframe>
     </div>
 </body>
 </html>
