@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture Quarterly Roadmap</title>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            color: #333;
+        }
+        h1, h2 { 
+            color: #333;
+        }
+        .export-btn { 
+            padding: 8px 12px; 
+            background-color: #4CAF50; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            margin: 10px 5px 10px 0; 
+        }
+        .roadmap-container {
+            width: 100%;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        .quarterly-roadmap {
+            display: grid;
+            grid-template-columns: 200px repeat(4, 1fr);
+            gap: 2px;
+            width: 100%;
+            max-width: 1100px;
+        }
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .topic-cell {
+            padding: 10px;
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        .quarter-cell {
+            padding: 10px;
+            text-align: center;
+            font-size: 0.9em;
+            min-height: 20px;
+        }
+        /* Type-based color coding */
+        .type-Product-Delivery {
+            background-color: #4472C4;
+            color: white;
+        }
+        .type-Tech-Debt {
+            background-color: #ED7D31;
+            color: white;
+        }
+        .type-Governance {
+            background-color: #70AD47;
+            color: white;
+        }
+        .type-Innovation {
+            background-color: #7030A0;
+            color: white;
+        }
+        .empty-cell {
+            background-color: #f9f9f9;
+        }
+        .legend {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+        }
+        .standalone-only {
+            display: block;
+        }
+        /* For printing/export - keep intact */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="standalone-only no-print">
+        <h1>Architecture Quarterly Roadmap - 2025</h1>
+        
+        <div>
+            <button class="export-btn no-print" onclick="exportToPNG()">Export as PNG</button>
+            <button class="export-btn no-print" onclick="window.location.href='index.html'">Back to Main View</button>
+        </div>
+    </div>
+    
+    <div id="roadmap-capture">
+        <h2>2025 Quarterly Roadmap</h2>
+        
+        <div class="roadmap-container">
+            <div class="quarterly-roadmap" id="quarterly-roadmap">
+                <!-- Roadmap content will be inserted here -->
+            </div>
+        </div>
+        
+        <div class="legend" id="legend">
+            <!-- Legend will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        // Check if this page is being embedded
+        const urlParams = new URLSearchParams(window.location.search);
+        const isEmbedded = urlParams.get('embedded') === 'true';
+        
+        // Show standalone elements if not embedded
+        if (!isEmbedded) {
+            document.querySelectorAll('.standalone-only').forEach(el => {
+                el.style.display = 'block';
+            });
+        }
+        
+        // Define the quarters and types (for color coding)
+        const quarters = ['Q1-2025', 'Q2-2025', 'Q3-2025', 'Q4-2025'];
+        const types = {
+            'Product Delivery': '#4472C4',
+            'Tech Debt': '#ED7D31',
+            'Governance': '#70AD47',
+            'Innovation': '#7030A0'
+        };
+        
+        // Render the quarterly roadmap
+        function renderRoadmap(data) {
+            const roadmapEl = document.getElementById('quarterly-roadmap');
+            
+            // Clear existing content
+            roadmapEl.innerHTML = '';
+            
+            // Add headers
+            roadmapEl.innerHTML += `<div class="topic-cell header">Initiative</div>`;
+            quarters.forEach(quarter => {
+                roadmapEl.innerHTML += `<div class="header">${quarter}</div>`;
+            });
+            
+            // Group data by type
+            const groupedData = {};
+            data.forEach(item => {
+                if (!groupedData[item.type]) {
+                    groupedData[item.type] = [];
+                }
+                groupedData[item.type].push(item);
+            });
+            
+            // Process each type
+            Object.keys(groupedData).sort().forEach(type => {
+                // Add items for this type
+                groupedData[type].forEach(item => {
+                    // Add the topic name
+                    roadmapEl.innerHTML += `<div class="topic-cell">${item.topic}</div>`;
+                    
+                    // Add quarters cells
+                    quarters.forEach(quarter => {
+                        const isInQuarter = item.quarters.includes(quarter);
+                        const typeClass = isInQuarter ? `type-${type.replace(/\s+/g, '-')}` : 'empty-cell';
+                        roadmapEl.innerHTML += `<div class="quarter-cell ${typeClass}">${isInQuarter ? '•' : ''}</div>`;
+                    });
+                });
+            });
+            
+            // Render the legend
+            renderLegend();
+        }
+        
+        // Render the legend for color coding
+        function renderLegend() {
+            const legendEl = document.getElementById('legend');
+            legendEl.innerHTML = '';
+            
+            Object.entries(types).forEach(([type, color]) => {
+                legendEl.innerHTML += `
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: ${color};"></div>
+                        <span>${type}</span>
+                    </div>
+                `;
+            });
+        }
+
+        // Export roadmap to PNG for PowerPoint
+        function exportToPNG() {
+            const element = document.getElementById('roadmap-capture');
+            
+            html2canvas(element, {
+                scale: 2, // Higher resolution
+                backgroundColor: '#fff',
+                logging: false
+            }).then(canvas => {
+                // Create a temporary link to download the image
+                const link = document.createElement('a');
+                link.download = 'quarterly_roadmap.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // Load the roadmap data and render
+        async function loadRoadmap() {
+            try {
+                const response = await fetch('quarterly-roadmap-data.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load roadmap data');
+                }
+                
+                const data = await response.json();
+                renderRoadmap(data);
+                
+            } catch (error) {
+                console.error('Error loading roadmap data:', error);
+                document.getElementById('quarterly-roadmap').innerHTML = 
+                    `<div style="color: red; grid-column: span 5;">Error loading roadmap data: ${error.message}</div>`;
+            }
+        }
+
+        // Initialize when the document is ready
+        document.addEventListener('DOMContentLoaded', loadRoadmap);
+    </script>
+</body>
+</html>
