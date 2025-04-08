@@ -1,74 +1,82 @@
 [
   {
-    "topic": "Cloud Migration",
+    "topic": "Datahub Phase 3",
+    "type": "Product Delivery",
+    "quarters": ["Q1-2025", "Q2-2025"],
+    "description": "DataHub Phase 3 implementation",
+    "startsBeforeQ1": true,
+    "continuesBeyondQ4": false
+  },
+  {
+    "topic": "Elevate Everywhere",
+    "type": "Product Delivery",
+    "quarters": ["Q1-2025", "Q2-2025", "Q3-2025", "Q4-2025"],
+    "description": "Elevate Everywhere implementation",
+    "startsBeforeQ1": false,
+    "continuesBeyondQ4": false
+  },
+  {
+    "topic": "DataHub Refinement",
     "type": "Tech Debt",
     "quarters": ["Q1-2025", "Q2-2025"],
-    "description": "Migration of on-premise systems to cloud infrastructure"
+    "description": "DataHub refinement and improvements",
+    "startsBeforeQ1": false,
+    "continuesBeyondQ4": false
   },
   {
-    "topic": "API Gateway Implementation",
-    "type": "Product Delivery",
-    "quarters": ["Q1-2025"],
-    "description": "Implementation of centralized API gateway"
-  },
-  {
-    "topic": "Security Compliance Audit",
+    "topic": "Snowflake",
     "type": "Governance",
-    "quarters": ["Q1-2025", "Q2-2025"],
-    "description": "Quarterly security compliance auditing"
+    "quarters": ["Q2-2025", "Q3-2025", "Q4-2025"],
+    "description": "Snowflake implementation",
+    "startsBeforeQ1": false,
+    "continuesBeyondQ4": true
   },
   {
-    "topic": "AI-Powered Recommendations",
+    "topic": "API Gateway",
+    "type": "Governance",
+    "quarters": ["Q1-2025", "Q2-2025", "Q3-2025", "Q4-2025"],
+    "description": "API Gateway implementation",
+    "startsBeforeQ1": true,
+    "continuesBeyondQ4": false
+  },
+  {
+    "topic": "Tech Radar",
     "type": "Innovation",
-    "quarters": ["Q2-2025", "Q3-2025"],
-    "description": "Machine learning recommendation engine for players"
+    "quarters": ["Q2-2025", "Q3-2025", "Q4-2025"],
+    "description": "Technology radar implementation",
+    "startsBeforeQ1": false,
+    "continuesBeyondQ4": false
   },
   {
-    "topic": "Microservices Platform",
-    "type": "Product Delivery",
+    "topic": "ADR",
+    "type": "Governance",
+    "quarters": ["Q2-2025", "Q3-2025", "Q4-2025"],
+    "description": "Architecture Decision Records implementation",
+    "startsBeforeQ1": false,
+    "continuesBeyondQ4": false
+  },
+  {
+    "topic": "Auth Integration",
+    "type": "Governance",
+    "quarters": ["Q1-2025", "Q2-2025", "Q3-2025", "Q4-2025"],
+    "description": "Authentication integration",
+    "startsBeforeQ1": true,
+    "continuesBeyondQ4": false
+  },
+  {
+    "topic": "AI Usage & Chatbot",
+    "type": "Innovation",
+    "quarters": ["Q1-2025", "Q2-2025", "Q3-2025", "Q4-2025"],
+    "description": "AI usage and chatbot implementation",
+    "startsBeforeQ1": true,
+    "continuesBeyondQ4": false
+  },
+  {
+    "topic": "Stage Environment Separation",
+    "type": "Governance",
     "quarters": ["Q1-2025", "Q2-2025", "Q3-2025"],
-    "description": "Development of microservices platform"
-  },
-  {
-    "topic": "Legacy System Decommission",
-    "type": "Tech Debt",
-    "quarters": ["Q3-2025", "Q4-2025"],
-    "description": "Phased decommissioning of legacy systems"
-  },
-  {
-    "topic": "GDPR Compliance Updates",
-    "type": "Governance",
-    "quarters": ["Q3-2025"],
-    "description": "Updates to ensure GDPR compliance"
-  },
-  {
-    "topic": "Blockchain Integration POC",
-    "type": "Innovation",
-    "quarters": ["Q4-2025"],
-    "description": "Proof of concept for blockchain integration"
-  },
-  {
-    "topic": "Mobile Platform Relaunch",
-    "type": "Product Delivery",
-    "quarters": ["Q3-2025", "Q4-2025"],
-    "description": "Redesign and relaunch of mobile platform"
-  },
-  {
-    "topic": "Infrastructure Automation",
-    "type": "Tech Debt",
-    "quarters": ["Q2-2025", "Q3-2025"],
-    "description": "Automation of infrastructure provisioning"
-  },
-  {
-    "topic": "Vendor Risk Assessment",
-    "type": "Governance",
-    "quarters": ["Q2-2025", "Q4-2025"],
-    "description": "Assessment of third-party vendor risks"
-  },
-  {
-    "topic": "AR Game Features",
-    "type": "Innovation",
-    "quarters": ["Q3-2025", "Q4-2025"],
-    "description": "Augmented reality features for games"
+    "description": "Separation of stage environments",
+    "startsBeforeQ1": true,
+    "continuesBeyondQ4": false
   }
 ]
