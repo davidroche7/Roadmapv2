@@ -10,169 +10,199 @@
             font-family: Arial, sans-serif; 
             margin: 20px; 
             color: #333;
+            background-color: #f8f8f8;
         }
         h1, h2 { 
             color: #333;
         }
         .export-btn { 
-            padding: 8px 12px; 
+            padding: 8px 16px; 
             background-color: #4CAF50; 
             color: white; 
             border: none; 
             border-radius: 4px; 
             cursor: pointer; 
             margin: 10px 5px 10px 0; 
+            font-weight: bold;
+        }
+        .back-btn {
+            padding: 8px 16px;
+            background-color: #607D8B;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px 10px 0;
+            font-weight: bold;
         }
         .roadmap-container {
             width: 100%;
-            overflow-x: auto;
-            margin: 20px 0;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            overflow: hidden;
         }
         .quarterly-roadmap {
             display: grid;
             grid-template-columns: 200px repeat(4, 1fr);
-            gap: 2px;
             width: 100%;
-            max-width: 1100px;
-        }
-        .header {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            font-weight: bold;
-            text-align: center;
-        }
-        .topic-cell {
-            padding: 10px;
-            background-color: #f5f5f5;
-            font-weight: bold;
-        }
-        .quarter-cell {
-            padding: 10px;
-            text-align: center;
-            font-size: 0.9em;
-            min-height: 20px;
             position: relative;
         }
-        .activity-container {
+        .quarter-markers {
+            display: grid;
+            grid-template-columns: 200px repeat(4, 1fr);
+            width: 100%;
+            height: 40px;
+            position: relative;
+        }
+        .quarter-marker {
+            position: relative;
+            text-align: center;
+            font-weight: bold;
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            border-radius: 4px 4px 0 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .quarter-divider {
             position: absolute;
-            top: 2px;
-            bottom: 2px;
-            left: 2px;
-            right: 2px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+        .month-marker {
+            position: absolute;
+            top: 40px;
+            width: 1px;
+            height: 5px;
+            background-color: rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .month-label {
+            position: absolute;
+            top: 45px;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: #777;
+        }
+        .label-cell {
+            padding: 10px;
+            font-weight: bold;
+            background-color: #f5f5f5;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            position: relative;
+            z-index: 2;
+        }
+        .activity-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            margin-bottom: 8px;
+            height: 40px;
+            position: relative;
+        }
+        .activity-timeline {
+            position: relative;
+            height: 40px;
+        }
+        .activity-bar {
+            position: absolute;
+            height: 32px;
+            top: 4px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 6px;
+            color: white;
             font-weight: 500;
-            z-index: 1;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 0 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            z-index: 2;
         }
-        .activity-left {
-            border-top-left-radius: 6px;
-            border-bottom-left-radius: 6px;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-            left: 2px;
-            right: 0;
-            padding-right: 0;
-        }
-        .activity-middle {
-            border-radius: 0;
-            left: 0;
-            right: 0;
-        }
-        .activity-right {
-            border-top-right-radius: 6px;
-            border-bottom-right-radius: 6px;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            right: 2px;
-            left: 0;
-            padding-left: 0;
-        }
-        .activity-single {
-            border-radius: 6px;
-        }
-        .activity-continues-left::before {
+        .activity-bar.continues-left:before {
             content: "◀";
             position: absolute;
-            left: 6px;
+            left: 8px;
             opacity: 0.7;
         }
-        .activity-continues-right::after {
+        .activity-bar.continues-right:after {
             content: "▶";
             position: absolute;
-            right: 6px;
+            right: 8px;
             opacity: 0.7;
         }
+        
         /* Type-based color coding */
         .type-Product-Delivery {
             background-color: #4472C4;
-            color: white;
         }
         .type-Tech-Debt {
             background-color: #ED7D31;
-            color: white;
         }
-        .type-Governance {
+        .type-Governance-Innovation {
             background-color: #70AD47;
-            color: white;
         }
-        .type-Innovation {
-            background-color: #7030A0;
-            color: white;
-        }
-        .empty-cell {
-            background-color: #f9f9f9;
-        }
+        
         .legend {
-            margin-top: 20px;
+            margin-top: 30px;
             display: flex;
-            gap: 15px;
+            gap: 20px;
             flex-wrap: wrap;
+            padding: 10px;
+            border-top: 1px solid #eee;
         }
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
         }
         .legend-color {
             width: 20px;
             height: 20px;
+            border-radius: 4px;
         }
-        .standalone-only {
-            display: block;
-        }
+        
         /* For printing/export - keep intact */
         @media print {
             body {
                 margin: 0;
                 padding: 0;
+                background-color: white;
             }
             .no-print {
                 display: none;
+            }
+            .roadmap-container {
+                box-shadow: none;
+                padding: 0;
             }
         }
     </style>
 </head>
 <body>
-    <div class="standalone-only no-print">
-        <h1>Architecture Quarterly Roadmap - 2025</h1>
-        
-        <div>
-            <button class="export-btn no-print" onclick="exportToPNG()">Export as PNG</button>
-            <button class="export-btn no-print" onclick="window.location.href='index.html'">Back to Main View</button>
-        </div>
+    <div class="no-print">
+        <button class="export-btn" onclick="exportToPNG()">Export as PNG</button>
+        <button class="back-btn" onclick="window.location.href='index.html'">Back to Main View</button>
     </div>
     
-    <div id="roadmap-capture">
+    <div class="roadmap-container" id="roadmap-capture">
         <h2>2025 Quarterly Roadmap</h2>
         
-        <div class="roadmap-container">
-            <div class="quarterly-roadmap" id="quarterly-roadmap">
-                <!-- Roadmap content will be inserted here -->
-            </div>
+        <div class="quarter-markers" id="quarter-markers">
+            <!-- Quarter headers will be inserted here -->
+        </div>
+        
+        <div id="activities-container">
+            <!-- Activity rows will be inserted here -->
         </div>
         
         <div class="legend" id="legend">
@@ -181,129 +211,207 @@
     </div>
 
     <script>
-        // Check if this page is being embedded
-        const urlParams = new URLSearchParams(window.location.search);
-        const isEmbedded = urlParams.get('embedded') === 'true';
-        
-        // Show standalone elements if not embedded
-        if (!isEmbedded) {
-            document.querySelectorAll('.standalone-only').forEach(el => {
-                el.style.display = 'block';
-            });
-        }
-        
-        // Define the quarters and types (for color coding)
+        // Define the quarters and months
         const quarters = ['Q1-2025', 'Q2-2025', 'Q3-2025', 'Q4-2025'];
+        const monthsPerQuarter = [
+            ['Jan', 'Feb', 'Mar'],
+            ['Apr', 'May', 'Jun'],
+            ['Jul', 'Aug', 'Sep'],
+            ['Oct', 'Nov', 'Dec']
+        ];
+        
+        // Define the types (for color coding)
         const types = {
             'Product Delivery': '#4472C4',
             'Tech Debt': '#ED7D31',
-            'Governance': '#70AD47',
-            'Innovation': '#7030A0'
+            'Governance & Innovation': '#70AD47'
         };
         
-        // Render the quarterly roadmap
-        function renderRoadmap(data) {
-            const roadmapEl = document.getElementById('quarterly-roadmap');
+        // Initialize the quarter markers and month indicators
+        function initializeTimelineGrid() {
+            const markersContainer = document.getElementById('quarter-markers');
+            markersContainer.innerHTML = '<div></div>'; // Empty first cell
             
-            // Clear existing content
-            roadmapEl.innerHTML = '';
-            
-            // Add headers
-            roadmapEl.innerHTML += `<div class="topic-cell header">Initiative</div>`;
-            quarters.forEach(quarter => {
-                roadmapEl.innerHTML += `<div class="header">${quarter}</div>`;
+            // Add quarter markers
+            quarters.forEach((quarter, qIndex) => {
+                markersContainer.innerHTML += `<div class="quarter-marker">${quarter}</div>`;
+                
+                // Add month markers and labels
+                monthsPerQuarter[qIndex].forEach((month, mIndex) => {
+                    const position = (qIndex * 25) + (mIndex * 8.33); // Position in percentage
+                    const markerPosition = 200 + (position * (document.querySelector('.quarterly-roadmap').offsetWidth - 200) / 100);
+                    
+                    const monthMarker = document.createElement('div');
+                    monthMarker.className = 'month-marker';
+                    monthMarker.style.left = `${markerPosition}px`;
+                    markersContainer.appendChild(monthMarker);
+                    
+                    const monthLabel = document.createElement('div');
+                    monthLabel.className = 'month-label';
+                    monthLabel.textContent = month;
+                    monthLabel.style.left = `${markerPosition}px`;
+                    markersContainer.appendChild(monthLabel);
+                });
             });
+            
+            // Add quarter dividers as vertical lines
+            for (let i = 1; i <= 3; i++) {
+                const dividerPosition = 200 + (i * (document.querySelector('.quarterly-roadmap').offsetWidth - 200) / 4);
+                const divider = document.createElement('div');
+                divider.className = 'quarter-divider';
+                divider.style.left = `${dividerPosition}px`;
+                document.getElementById('activities-container').appendChild(divider);
+            }
+        }
+        
+        // Calculate position based on month and year
+        function calculatePosition(timeInfo) {
+            // Parse time info (format: "Month" or "early/mid/late Month")
+            let month, modifier = null;
+            
+            if (timeInfo.includes('early')) {
+                modifier = 'early';
+                month = timeInfo.replace('early ', '');
+            } else if (timeInfo.includes('mid')) {
+                modifier = 'mid';
+                month = timeInfo.replace('mid ', '');
+            } else if (timeInfo.includes('late')) {
+                modifier = 'late';
+                month = timeInfo.replace('late ', '');
+            } else {
+                month = timeInfo;
+            }
+            
+            // Map month to position
+            const monthMap = {
+                'Jan': { quarter: 0, position: 0 },
+                'Feb': { quarter: 0, position: 1 },
+                'Mar': { quarter: 0, position: 2 },
+                'Apr': { quarter: 1, position: 0 },
+                'May': { quarter: 1, position: 1 },
+                'Jun': { quarter: 1, position: 2 },
+                'Jul': { quarter: 2, position: 0 },
+                'Aug': { quarter: 2, position: 1 },
+                'Sep': { quarter: 2, position: 2 },
+                'Oct': { quarter: 3, position: 0 },
+                'Nov': { quarter: 3, position: 1 },
+                'Dec': { quarter: 3, position: 2 }
+            };
+            
+            if (!monthMap[month]) {
+                console.error(`Unknown month: ${month}`);
+                return 0;
+            }
+            
+            const quarterPosition = monthMap[month].quarter * 25; // Each quarter is 25%
+            let monthOffset = monthMap[month].position * 8.33; // Each month is ~8.33%
+            
+            // Adjust for early/mid/late
+            if (modifier === 'early') {
+                monthOffset += 2.78; // 1/3 of a month
+            } else if (modifier === 'mid') {
+                monthOffset += 4.17; // 1/2 of a month
+            } else if (modifier === 'late') {
+                monthOffset += 5.55; // 2/3 of a month
+            }
+            
+            return quarterPosition + monthOffset;
+        }
+        
+        // Render the activities
+        function renderActivities(data) {
+            const containerEl = document.getElementById('activities-container');
+            containerEl.innerHTML = '';
             
             // Group data by type
             const groupedData = {};
             data.forEach(item => {
+                // Map "Governance" or "Innovation" to "Governance & Innovation"
+                if (item.type === "Governance" || item.type === "Innovation") {
+                    item.type = "Governance & Innovation";
+                }
+                
                 if (!groupedData[item.type]) {
                     groupedData[item.type] = [];
                 }
                 groupedData[item.type].push(item);
             });
             
-            // Process each type
-            Object.keys(groupedData).sort().forEach(type => {
-                // Add items for this type
-                groupedData[type].forEach(item => {
-                    // Add the topic name
-                    roadmapEl.innerHTML += `<div class="topic-cell">${item.topic}</div>`;
-                    
-                    // Create continuous activity boxes
-                    const activitySpans = [];
-                    let inActivity = false;
-                    let activityStart = -1;
-                    
-                    // First determine the spans
-                    quarters.forEach((quarter, index) => {
-                        if (item.quarters.includes(quarter)) {
-                            if (!inActivity) {
-                                inActivity = true;
-                                activityStart = index;
-                            }
-                        } else {
-                            if (inActivity) {
-                                inActivity = false;
-                                activitySpans.push({
-                                    start: activityStart,
-                                    end: index - 1,
-                                    type: type.replace(/\s+/g, '-')
-                                });
-                            }
-                        }
-                    });
-                    
-                    // If still in activity at the end, close it
-                    if (inActivity) {
-                        activitySpans.push({
-                            start: activityStart,
-                            end: quarters.length - 1,
-                            type: type.replace(/\s+/g, '-')
-                        });
-                    }
-                    
-                    // Add quarters cells
-                    quarters.forEach((quarter, index) => {
-                        roadmapEl.innerHTML += `<div class="quarter-cell empty-cell" id="cell-${item.topic.replace(/[^a-zA-Z0-9]/g, '-')}-${index}"></div>`;
-                    });
-                    
-                    // Add activity spans
-                    activitySpans.forEach(span => {
-                        const spanLength = span.end - span.start + 1;
-                        let positionClass = '';
-                        
-                        if (spanLength === 1) {
-                            positionClass = 'activity-single';
-                        } else {
-                            for (let i = span.start; i <= span.end; i++) {
-                                if (i === span.start) {
-                                    positionClass = 'activity-left';
-                                } else if (i === span.end) {
-                                    positionClass = 'activity-right';
-                                } else {
-                                    positionClass = 'activity-middle';
-                                }
-                                
-                                const cell = document.getElementById(`cell-${item.topic.replace(/[^a-zA-Z0-9]/g, '-')}-${i}`);
-                                
-                                // Check if activity continues before or after the visible quarters
-                                let continuesClass = '';
-                                if (i === span.start && item.startsBeforeQ1) {
-                                    continuesClass += ' activity-continues-left';
-                                }
-                                if (i === span.end && item.continuesBeyondQ4) {
-                                    continuesClass += ' activity-continues-right';
-                                }
-                                
-                                const activityText = (spanLength === 1 || i === Math.floor((span.start + span.end) / 2)) ? item.topic : '';
-                                
-                                cell.innerHTML = `<div class="activity-container ${positionClass} type-${span.type}${continuesClass}">${activityText}</div>`;
-                            }
-                        }
-                    });
-                });
+            // Process each activity
+            data.forEach((item, index) => {
+                const activityRow = document.createElement('div');
+                activityRow.className = 'activity-row';
+                
+                // Add the label cell
+                const labelCell = document.createElement('div');
+                labelCell.className = 'label-cell';
+                labelCell.textContent = item.topic;
+                activityRow.appendChild(labelCell);
+                
+                // Add the timeline
+                const timeline = document.createElement('div');
+                timeline.className = 'activity-timeline';
+                activityRow.appendChild(timeline);
+                
+                // Calculate position and width
+                let startPos = 0;
+                let endPos = 100;
+                
+                // If specific timing is provided
+                if (item.startMonth) {
+                    startPos = calculatePosition(item.startMonth);
+                } else if (item.quarters && item.quarters.length > 0) {
+                    // Default to quarter start
+                    const firstQuarter = item.quarters[0];
+                    const qIndex = quarters.indexOf(firstQuarter);
+                    startPos = qIndex * 25;
+                }
+                
+                if (item.endMonth) {
+                    endPos = calculatePosition(item.endMonth);
+                } else if (item.quarters && item.quarters.length > 0) {
+                    // Default to quarter end
+                    const lastQuarter = item.quarters[item.quarters.length - 1];
+                    const qIndex = quarters.indexOf(lastQuarter);
+                    endPos = (qIndex + 1) * 25;
+                }
+                
+                // Map type for color coding
+                let activityType = item.type;
+                if (activityType === "Governance" || activityType === "Innovation") {
+                    activityType = "Governance & Innovation";
+                }
+                
+                // Create activity bar
+                const typeClass = `type-${activityType.replace(/\s+/g, '-')}`;
+                const activityBar = document.createElement('div');
+                activityBar.className = `activity-bar ${typeClass}`;
+                
+                // Check if continues beyond visible area
+                if (item.startsBeforeQ1) {
+                    activityBar.classList.add('continues-left');
+                }
+                if (item.continuesBeyondQ4) {
+                    activityBar.classList.add('continues-right');
+                }
+                
+                // Position and size
+                activityBar.style.left = `${startPos}%`;
+                activityBar.style.width = `${endPos - startPos}%`;
+                activityBar.textContent = item.topic;
+                
+                timeline.appendChild(activityBar);
+                containerEl.appendChild(activityRow);
             });
+            
+            // Add quarter dividers
+            for (let i = 1; i <= 3; i++) {
+                const dividerPosition = i * 25;
+                const divider = document.createElement('div');
+                divider.className = 'quarter-divider';
+                divider.style.left = `${dividerPosition}%`;
+                containerEl.appendChild(divider);
+            }
             
             // Render the legend
             renderLegend();
@@ -350,17 +458,23 @@
                 }
                 
                 const data = await response.json();
-                renderRoadmap(data);
+                initializeTimelineGrid();
+                renderActivities(data);
                 
             } catch (error) {
                 console.error('Error loading roadmap data:', error);
-                document.getElementById('quarterly-roadmap').innerHTML = 
-                    `<div style="color: red; grid-column: span 5;">Error loading roadmap data: ${error.message}</div>`;
+                document.getElementById('activities-container').innerHTML = 
+                    `<div style="color: red; padding: 20px;">Error loading roadmap data: ${error.message}</div>`;
             }
         }
 
         // Initialize when the document is ready
         document.addEventListener('DOMContentLoaded', loadRoadmap);
+        
+        // Redraw on window resize for responsive behavior
+        window.addEventListener('resize', () => {
+            initializeTimelineGrid();
+        });
     </script>
 </body>
 </html>
