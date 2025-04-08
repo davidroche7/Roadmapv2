@@ -29,7 +29,7 @@
   },
   {
     "topic": "Snowflake",
-    "type": "Governance",
+    "type": "Governance & Innovation",
     "quarters": ["Q2-2025", "Q3-2025", "Q4-2025"],
     "startMonth": "Apr",
     "description": "Snowflake implementation",
@@ -38,7 +38,7 @@
   },
   {
     "topic": "API Gateway",
-    "type": "Governance",
+    "type": "Governance & Innovation",
     "quarters": ["Q1-2025", "Q2-2025", "Q3-2025", "Q4-2025"],
     "startMonth": "Feb",
     "endMonth": "mid Q4",
@@ -48,7 +48,7 @@
   },
   {
     "topic": "Tech Radar",
-    "type": "Innovation",
+    "type": "Governance & Innovation",
     "quarters": ["Q2-2025", "Q3-2025", "Q4-2025"],
     "startMonth": "May",
     "endMonth": "Dec",
@@ -58,7 +58,7 @@
   },
   {
     "topic": "ADR",
-    "type": "Governance",
+    "type": "Governance & Innovation",
     "quarters": ["Q2-2025", "Q3-2025", "Q4-2025"],
     "startMonth": "May",
     "endMonth": "Dec",
@@ -68,7 +68,7 @@
   },
   {
     "topic": "Auth Integration",
-    "type": "Governance",
+    "type": "Governance & Innovation",
     "quarters": ["Q1-2025", "Q2-2025", "Q3-2025", "Q4-2025"],
     "description": "Authentication integration",
     "startsBeforeQ1": true,
@@ -76,7 +76,7 @@
   },
   {
     "topic": "AI Usage & Chatbot",
-    "type": "Innovation",
+    "type": "Governance & Innovation",
     "quarters": ["Q1-2025", "Q2-2025", "Q3-2025", "Q4-2025"],
     "description": "AI usage and chatbot implementation",
     "startsBeforeQ1": true,
@@ -84,7 +84,7 @@
   },
   {
     "topic": "Stage Environment Separation",
-    "type": "Governance",
+    "type": "Governance & Innovation",
     "quarters": ["Q1-2025", "Q2-2025", "Q3-2025"],
     "startMonth": "Jan",
     "endMonth": "Sep",
