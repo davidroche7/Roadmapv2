@@ -52,6 +52,59 @@
             text-align: center;
             font-size: 0.9em;
             min-height: 20px;
+            position: relative;
+        }
+        .activity-container {
+            position: absolute;
+            top: 2px;
+            bottom: 2px;
+            left: 2px;
+            right: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-weight: 500;
+            z-index: 1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .activity-left {
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            left: 2px;
+            right: 0;
+            padding-right: 0;
+        }
+        .activity-middle {
+            border-radius: 0;
+            left: 0;
+            right: 0;
+        }
+        .activity-right {
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            right: 2px;
+            left: 0;
+            padding-left: 0;
+        }
+        .activity-single {
+            border-radius: 6px;
+        }
+        .activity-continues-left::before {
+            content: "◀";
+            position: absolute;
+            left: 6px;
+            opacity: 0.7;
+        }
+        .activity-continues-right::after {
+            content: "▶";
+            position: absolute;
+            right: 6px;
+            opacity: 0.7;
         }
         /* Type-based color coding */
         .type-Product-Delivery {
@@ -177,11 +230,77 @@
                     // Add the topic name
                     roadmapEl.innerHTML += `<div class="topic-cell">${item.topic}</div>`;
                     
+                    // Create continuous activity boxes
+                    const activitySpans = [];
+                    let inActivity = false;
+                    let activityStart = -1;
+                    
+                    // First determine the spans
+                    quarters.forEach((quarter, index) => {
+                        if (item.quarters.includes(quarter)) {
+                            if (!inActivity) {
+                                inActivity = true;
+                                activityStart = index;
+                            }
+                        } else {
+                            if (inActivity) {
+                                inActivity = false;
+                                activitySpans.push({
+                                    start: activityStart,
+                                    end: index - 1,
+                                    type: type.replace(/\s+/g, '-')
+                                });
+                            }
+                        }
+                    });
+                    
+                    // If still in activity at the end, close it
+                    if (inActivity) {
+                        activitySpans.push({
+                            start: activityStart,
+                            end: quarters.length - 1,
+                            type: type.replace(/\s+/g, '-')
+                        });
+                    }
+                    
                     // Add quarters cells
-                    quarters.forEach(quarter => {
-                        const isInQuarter = item.quarters.includes(quarter);
-                        const typeClass = isInQuarter ? `type-${type.replace(/\s+/g, '-')}` : 'empty-cell';
-                        roadmapEl.innerHTML += `<div class="quarter-cell ${typeClass}">${isInQuarter ? '•' : ''}</div>`;
+                    quarters.forEach((quarter, index) => {
+                        roadmapEl.innerHTML += `<div class="quarter-cell empty-cell" id="cell-${item.topic.replace(/[^a-zA-Z0-9]/g, '-')}-${index}"></div>`;
+                    });
+                    
+                    // Add activity spans
+                    activitySpans.forEach(span => {
+                        const spanLength = span.end - span.start + 1;
+                        let positionClass = '';
+                        
+                        if (spanLength === 1) {
+                            positionClass = 'activity-single';
+                        } else {
+                            for (let i = span.start; i <= span.end; i++) {
+                                if (i === span.start) {
+                                    positionClass = 'activity-left';
+                                } else if (i === span.end) {
+                                    positionClass = 'activity-right';
+                                } else {
+                                    positionClass = 'activity-middle';
+                                }
+                                
+                                const cell = document.getElementById(`cell-${item.topic.replace(/[^a-zA-Z0-9]/g, '-')}-${i}`);
+                                
+                                // Check if activity continues before or after the visible quarters
+                                let continuesClass = '';
+                                if (i === span.start && item.startsBeforeQ1) {
+                                    continuesClass += ' activity-continues-left';
+                                }
+                                if (i === span.end && item.continuesBeyondQ4) {
+                                    continuesClass += ' activity-continues-right';
+                                }
+                                
+                                const activityText = (spanLength === 1 || i === Math.floor((span.start + span.end) / 2)) ? item.topic : '';
+                                
+                                cell.innerHTML = `<div class="activity-container ${positionClass} type-${span.type}${continuesClass}">${activityText}</div>`;
+                            }
+                        }
                     });
                 });
             });
