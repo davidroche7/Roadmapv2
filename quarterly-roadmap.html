@@ -326,11 +326,6 @@
             // Group data by type
             const groupedData = {};
             data.forEach(item => {
-                // Map "Governance" or "Innovation" to "Governance & Innovation"
-                if (item.type === "Governance" || item.type === "Innovation") {
-                    item.type = "Governance & Innovation";
-                }
-                
                 if (!groupedData[item.type]) {
                     groupedData[item.type] = [];
                 }
@@ -376,14 +371,8 @@
                     endPos = (qIndex + 1) * 25;
                 }
                 
-                // Map type for color coding
-                let activityType = item.type;
-                if (activityType === "Governance" || activityType === "Innovation") {
-                    activityType = "Governance & Innovation";
-                }
-                
                 // Create activity bar
-                const typeClass = `type-${activityType.replace(/\s+/g, '-')}`;
+                const typeClass = `type-${item.type.replace(/\s+/g, '-')}`;
                 const activityBar = document.createElement('div');
                 activityBar.className = `activity-bar ${typeClass}`;
                 
