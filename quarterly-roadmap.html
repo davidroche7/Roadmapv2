@@ -45,17 +45,16 @@
             padding: 20px;
             overflow: hidden;
         }
-        .quarterly-roadmap {
+        .timeline-container {
             display: grid;
-            grid-template-columns: 200px repeat(4, 1fr);
+            grid-template-columns: 200px 1fr;
             width: 100%;
-            position: relative;
         }
         .quarter-markers {
+            grid-column: 2;
             display: grid;
-            grid-template-columns: 200px repeat(4, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             width: 100%;
-            height: 40px;
             position: relative;
         }
         .quarter-marker {
@@ -68,37 +67,23 @@
             border-radius: 4px 4px 0 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .quarter-divider {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 1px;
-            background-color: rgba(0,0,0,0.1);
-            z-index: 1;
+        .month-markers {
+            grid-column: 2;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            width: 100%;
+            height: 20px;
+            position: relative;
         }
         .month-marker {
-            position: absolute;
-            top: 40px;
-            width: 1px;
-            height: 5px;
-            background-color: rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-        .month-label {
-            position: absolute;
-            top: 45px;
-            transform: translateX(-50%);
             font-size: 9px;
             color: #777;
+            text-align: center;
+            padding-top: 5px;
+            border-right: 1px dotted #eee;
         }
-        .label-cell {
-            padding: 10px;
-            font-weight: bold;
-            background-color: #f5f5f5;
-            margin-bottom: 5px;
-            border-radius: 4px;
-            position: relative;
-            z-index: 2;
+        .month-marker:last-child {
+            border-right: none;
         }
         .activity-row {
             display: grid;
@@ -107,9 +92,20 @@
             height: 40px;
             position: relative;
         }
+        .activity-label {
+            padding: 10px;
+            font-weight: bold;
+            background-color: #f5f5f5;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            position: relative;
+            z-index: 2;
+        }
         .activity-timeline {
             position: relative;
             height: 40px;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
         }
         .activity-bar {
             position: absolute;
@@ -197,8 +193,32 @@
     <div class="roadmap-container" id="roadmap-capture">
         <h2>2025 Quarterly Roadmap</h2>
         
-        <div class="quarter-markers" id="quarter-markers">
-            <!-- Quarter headers will be inserted here -->
+        <div class="timeline-container">
+            <div></div> <!-- Empty cell -->
+            
+            <div class="quarter-markers">
+                <div class="quarter-marker">Q1-2025</div>
+                <div class="quarter-marker">Q2-2025</div>
+                <div class="quarter-marker">Q3-2025</div>
+                <div class="quarter-marker">Q4-2025</div>
+            </div>
+            
+            <div></div> <!-- Empty cell -->
+            
+            <div class="month-markers">
+                <div class="month-marker">Jan</div>
+                <div class="month-marker">Feb</div>
+                <div class="month-marker">Mar</div>
+                <div class="month-marker">Apr</div>
+                <div class="month-marker">May</div>
+                <div class="month-marker">Jun</div>
+                <div class="month-marker">Jul</div>
+                <div class="month-marker">Aug</div>
+                <div class="month-marker">Sep</div>
+                <div class="month-marker">Oct</div>
+                <div class="month-marker">Nov</div>
+                <div class="month-marker">Dec</div>
+            </div>
         </div>
         
         <div id="activities-container">
@@ -211,14 +231,21 @@
     </div>
 
     <script>
-        // Define the quarters and months
-        const quarters = ['Q1-2025', 'Q2-2025', 'Q3-2025', 'Q4-2025'];
-        const monthsPerQuarter = [
-            ['Jan', 'Feb', 'Mar'],
-            ['Apr', 'May', 'Jun'],
-            ['Jul', 'Aug', 'Sep'],
-            ['Oct', 'Nov', 'Dec']
-        ];
+        // Define the months to position calculation
+        const monthPositions = {
+            'Jan': 0,
+            'Feb': 1,
+            'Mar': 2,
+            'Apr': 3,
+            'May': 4,
+            'Jun': 5,
+            'Jul': 6,
+            'Aug': 7,
+            'Sep': 8,
+            'Oct': 9,
+            'Nov': 10,
+            'Dec': 11
+        };
         
         // Define the types (for color coding)
         const types = {
@@ -227,45 +254,16 @@
             'Governance & Innovation': '#70AD47'
         };
         
-        // Initialize the quarter markers and month indicators
-        function initializeTimelineGrid() {
-            const markersContainer = document.getElementById('quarter-markers');
-            markersContainer.innerHTML = '<div></div>'; // Empty first cell
-            
-            // Add quarter markers
-            quarters.forEach((quarter, qIndex) => {
-                markersContainer.innerHTML += `<div class="quarter-marker">${quarter}</div>`;
-                
-                // Add month markers and labels
-                monthsPerQuarter[qIndex].forEach((month, mIndex) => {
-                    const position = (qIndex * 25) + (mIndex * 8.33); // Position in percentage
-                    const markerPosition = 200 + (position * (document.querySelector('.quarterly-roadmap').offsetWidth - 200) / 100);
-                    
-                    const monthMarker = document.createElement('div');
-                    monthMarker.className = 'month-marker';
-                    monthMarker.style.left = `${markerPosition}px`;
-                    markersContainer.appendChild(monthMarker);
-                    
-                    const monthLabel = document.createElement('div');
-                    monthLabel.className = 'month-label';
-                    monthLabel.textContent = month;
-                    monthLabel.style.left = `${markerPosition}px`;
-                    markersContainer.appendChild(monthLabel);
-                });
-            });
-            
-            // Add quarter dividers as vertical lines
-            for (let i = 1; i <= 3; i++) {
-                const dividerPosition = 200 + (i * (document.querySelector('.quarterly-roadmap').offsetWidth - 200) / 4);
-                const divider = document.createElement('div');
-                divider.className = 'quarter-divider';
-                divider.style.left = `${dividerPosition}px`;
-                document.getElementById('activities-container').appendChild(divider);
-            }
-        }
-        
         // Calculate position based on month and year
-        function calculatePosition(timeInfo) {
+        function getMonthPosition(timeInfo) {
+            // Default to the middle of the specified quarter if no specific month
+            if (timeInfo.startsWith('Q1')) return 1;
+            if (timeInfo.startsWith('Q2')) return 4;
+            if (timeInfo.startsWith('Q3')) return 7;
+            if (timeInfo.startsWith('Q4')) return 10;
+            if (timeInfo === 'before Q1') return -1;
+            if (timeInfo === 'after Q4') return 12;
+            
             // Parse time info (format: "Month" or "early/mid/late Month")
             let month, modifier = null;
             
@@ -282,55 +280,29 @@
                 month = timeInfo;
             }
             
-            // Map month to position
-            const monthMap = {
-                'Jan': { quarter: 0, position: 0 },
-                'Feb': { quarter: 0, position: 1 },
-                'Mar': { quarter: 0, position: 2 },
-                'Apr': { quarter: 1, position: 0 },
-                'May': { quarter: 1, position: 1 },
-                'Jun': { quarter: 1, position: 2 },
-                'Jul': { quarter: 2, position: 0 },
-                'Aug': { quarter: 2, position: 1 },
-                'Sep': { quarter: 2, position: 2 },
-                'Oct': { quarter: 3, position: 0 },
-                'Nov': { quarter: 3, position: 1 },
-                'Dec': { quarter: 3, position: 2 }
-            };
-            
-            if (!monthMap[month]) {
+            if (!monthPositions.hasOwnProperty(month)) {
                 console.error(`Unknown month: ${month}`);
                 return 0;
             }
             
-            const quarterPosition = monthMap[month].quarter * 25; // Each quarter is 25%
-            let monthOffset = monthMap[month].position * 8.33; // Each month is ~8.33%
+            let position = monthPositions[month];
             
             // Adjust for early/mid/late
             if (modifier === 'early') {
-                monthOffset += 2.78; // 1/3 of a month
+                position += 0.25;
             } else if (modifier === 'mid') {
-                monthOffset += 4.17; // 1/2 of a month
+                position += 0.5;
             } else if (modifier === 'late') {
-                monthOffset += 5.55; // 2/3 of a month
+                position += 0.75;
             }
             
-            return quarterPosition + monthOffset;
+            return position;
         }
         
         // Render the activities
         function renderActivities(data) {
             const containerEl = document.getElementById('activities-container');
             containerEl.innerHTML = '';
-            
-            // Group data by type
-            const groupedData = {};
-            data.forEach(item => {
-                if (!groupedData[item.type]) {
-                    groupedData[item.type] = [];
-                }
-                groupedData[item.type].push(item);
-            });
             
             // Process each activity
             data.forEach((item, index) => {
@@ -339,7 +311,7 @@
                 
                 // Add the label cell
                 const labelCell = document.createElement('div');
-                labelCell.className = 'label-cell';
+                labelCell.className = 'activity-label';
                 labelCell.textContent = item.topic;
                 activityRow.appendChild(labelCell);
                 
@@ -350,25 +322,29 @@
                 
                 // Calculate position and width
                 let startPos = 0;
-                let endPos = 100;
+                let endPos = 11;
                 
                 // If specific timing is provided
                 if (item.startMonth) {
-                    startPos = calculatePosition(item.startMonth);
+                    startPos = getMonthPosition(item.startMonth);
                 } else if (item.quarters && item.quarters.length > 0) {
                     // Default to quarter start
                     const firstQuarter = item.quarters[0];
-                    const qIndex = quarters.indexOf(firstQuarter);
-                    startPos = qIndex * 25;
+                    if (firstQuarter === 'Q1-2025') startPos = 0;
+                    if (firstQuarter === 'Q2-2025') startPos = 3;
+                    if (firstQuarter === 'Q3-2025') startPos = 6;
+                    if (firstQuarter === 'Q4-2025') startPos = 9;
                 }
                 
                 if (item.endMonth) {
-                    endPos = calculatePosition(item.endMonth);
+                    endPos = getMonthPosition(item.endMonth);
                 } else if (item.quarters && item.quarters.length > 0) {
                     // Default to quarter end
                     const lastQuarter = item.quarters[item.quarters.length - 1];
-                    const qIndex = quarters.indexOf(lastQuarter);
-                    endPos = (qIndex + 1) * 25;
+                    if (lastQuarter === 'Q1-2025') endPos = 2;
+                    if (lastQuarter === 'Q2-2025') endPos = 5;
+                    if (lastQuarter === 'Q3-2025') endPos = 8;
+                    if (lastQuarter === 'Q4-2025') endPos = 11;
                 }
                 
                 // Create activity bar
@@ -377,30 +353,27 @@
                 activityBar.className = `activity-bar ${typeClass}`;
                 
                 // Check if continues beyond visible area
-                if (item.startsBeforeQ1) {
+                if (item.startsBeforeQ1 || startPos < 0) {
                     activityBar.classList.add('continues-left');
+                    startPos = Math.max(0, startPos);
                 }
-                if (item.continuesBeyondQ4) {
+                if (item.continuesBeyondQ4 || endPos > 11) {
                     activityBar.classList.add('continues-right');
+                    endPos = Math.min(11, endPos);
                 }
                 
                 // Position and size
-                activityBar.style.left = `${startPos}%`;
-                activityBar.style.width = `${endPos - startPos}%`;
+                const totalMonths = 12;
+                const leftPercent = (startPos / totalMonths) * 100;
+                const widthPercent = ((endPos - startPos + 1) / totalMonths) * 100;
+                
+                activityBar.style.left = `${leftPercent}%`;
+                activityBar.style.width = `${widthPercent}%`;
                 activityBar.textContent = item.topic;
                 
                 timeline.appendChild(activityBar);
                 containerEl.appendChild(activityRow);
             });
-            
-            // Add quarter dividers
-            for (let i = 1; i <= 3; i++) {
-                const dividerPosition = i * 25;
-                const divider = document.createElement('div');
-                divider.className = 'quarter-divider';
-                divider.style.left = `${dividerPosition}%`;
-                containerEl.appendChild(divider);
-            }
             
             // Render the legend
             renderLegend();
@@ -447,7 +420,6 @@
                 }
                 
                 const data = await response.json();
-                initializeTimelineGrid();
                 renderActivities(data);
                 
             } catch (error) {
@@ -459,11 +431,6 @@
 
         // Initialize when the document is ready
         document.addEventListener('DOMContentLoaded', loadRoadmap);
-        
-        // Redraw on window resize for responsive behavior
-        window.addEventListener('resize', () => {
-            initializeTimelineGrid();
-        });
     </script>
 </body>
 </html>
