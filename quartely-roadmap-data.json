@@ -1,0 +1,74 @@
+[
+  {
+    "topic": "Cloud Migration",
+    "type": "Tech Debt",
+    "quarters": ["Q1-2025", "Q2-2025"],
+    "description": "Migration of on-premise systems to cloud infrastructure"
+  },
+  {
+    "topic": "API Gateway Implementation",
+    "type": "Product Delivery",
+    "quarters": ["Q1-2025"],
+    "description": "Implementation of centralized API gateway"
+  },
+  {
+    "topic": "Security Compliance Audit",
+    "type": "Governance",
+    "quarters": ["Q1-2025", "Q2-2025"],
+    "description": "Quarterly security compliance auditing"
+  },
+  {
+    "topic": "AI-Powered Recommendations",
+    "type": "Innovation",
+    "quarters": ["Q2-2025", "Q3-2025"],
+    "description": "Machine learning recommendation engine for players"
+  },
+  {
+    "topic": "Microservices Platform",
+    "type": "Product Delivery",
+    "quarters": ["Q1-2025", "Q2-2025", "Q3-2025"],
+    "description": "Development of microservices platform"
+  },
+  {
+    "topic": "Legacy System Decommission",
+    "type": "Tech Debt",
+    "quarters": ["Q3-2025", "Q4-2025"],
+    "description": "Phased decommissioning of legacy systems"
+  },
+  {
+    "topic": "GDPR Compliance Updates",
+    "type": "Governance",
+    "quarters": ["Q3-2025"],
+    "description": "Updates to ensure GDPR compliance"
+  },
+  {
+    "topic": "Blockchain Integration POC",
+    "type": "Innovation",
+    "quarters": ["Q4-2025"],
+    "description": "Proof of concept for blockchain integration"
+  },
+  {
+    "topic": "Mobile Platform Relaunch",
+    "type": "Product Delivery",
+    "quarters": ["Q3-2025", "Q4-2025"],
+    "description": "Redesign and relaunch of mobile platform"
+  },
+  {
+    "topic": "Infrastructure Automation",
+    "type": "Tech Debt",
+    "quarters": ["Q2-2025", "Q3-2025"],
+    "description": "Automation of infrastructure provisioning"
+  },
+  {
+    "topic": "Vendor Risk Assessment",
+    "type": "Governance",
+    "quarters": ["Q2-2025", "Q4-2025"],
+    "description": "Assessment of third-party vendor risks"
+  },
+  {
+    "topic": "AR Game Features",
+    "type": "Innovation",
+    "quarters": ["Q3-2025", "Q4-2025"],
+    "description": "Augmented reality features for games"
+  }
+]
