@@ -3,6 +3,8 @@
     "topic": "Datahub Phase 3",
     "type": "Product Delivery",
     "quarters": ["Q1-2025", "Q2-2025"],
+    "startMonth": "before Q1",
+    "endMonth": "May",
     "description": "DataHub Phase 3 implementation",
     "startsBeforeQ1": true,
     "continuesBeyondQ4": false
@@ -19,6 +21,8 @@
     "topic": "DataHub Refinement",
     "type": "Tech Debt",
     "quarters": ["Q1-2025", "Q2-2025"],
+    "startMonth": "Mar",
+    "endMonth": "Jul",
     "description": "DataHub refinement and improvements",
     "startsBeforeQ1": false,
     "continuesBeyondQ4": false
@@ -27,6 +31,7 @@
     "topic": "Snowflake",
     "type": "Governance",
     "quarters": ["Q2-2025", "Q3-2025", "Q4-2025"],
+    "startMonth": "Apr",
     "description": "Snowflake implementation",
     "startsBeforeQ1": false,
     "continuesBeyondQ4": true
@@ -35,6 +40,8 @@
     "topic": "API Gateway",
     "type": "Governance",
     "quarters": ["Q1-2025", "Q2-2025", "Q3-2025", "Q4-2025"],
+    "startMonth": "Feb",
+    "endMonth": "mid Q4",
     "description": "API Gateway implementation",
     "startsBeforeQ1": true,
     "continuesBeyondQ4": false
@@ -43,6 +50,8 @@
     "topic": "Tech Radar",
     "type": "Innovation",
     "quarters": ["Q2-2025", "Q3-2025", "Q4-2025"],
+    "startMonth": "May",
+    "endMonth": "Dec",
     "description": "Technology radar implementation",
     "startsBeforeQ1": false,
     "continuesBeyondQ4": false
@@ -51,6 +60,8 @@
     "topic": "ADR",
     "type": "Governance",
     "quarters": ["Q2-2025", "Q3-2025", "Q4-2025"],
+    "startMonth": "May",
+    "endMonth": "Dec",
     "description": "Architecture Decision Records implementation",
     "startsBeforeQ1": false,
     "continuesBeyondQ4": false
@@ -75,6 +86,8 @@
     "topic": "Stage Environment Separation",
     "type": "Governance",
     "quarters": ["Q1-2025", "Q2-2025", "Q3-2025"],
+    "startMonth": "Jan",
+    "endMonth": "Sep",
     "description": "Separation of stage environments",
     "startsBeforeQ1": true,
     "continuesBeyondQ4": false
