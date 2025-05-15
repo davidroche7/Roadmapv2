@@ -1,345 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Architecture Roadmap</title>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
-    <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            margin: 20px; 
-            color: #333;
-            background-color: #f9f9f9;
-        }
-        h1, h2 { 
-            color: #333;
-        }
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin: 20px 0; 
-            overflow-x: auto;
-            display: block;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border-radius: 4px;
-        }
-        th, td { 
-            padding: 10px; 
-            text-align: left; 
-            border: 1px solid #ddd; 
-        }
-        th { 
-            background-color: #f2f2f2; 
-            position: sticky;
-            top: 0;
-        }
-        .export-btn { 
-            padding: 8px 16px; 
-            background-color: #4CAF50; 
-            color: white; 
-            border: none; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            margin: 10px 5px 10px 0; 
-            transition: background-color 0.2s;
-        }
-        .export-btn:hover {
-            background-color: #3d9140;
-        }
-        .mermaid-container {
-            overflow-x: auto;
-            margin: 20px 0;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .table-container {
-            margin: 20px 0;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            padding: 1px;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        .standalone-only {
-            display: none;
-        }
-        
-        /* Modern vibrant Gantt chart section colors */
-        /* Governance & Innovation - Modern Indigo */
-        .mermaid .section0 rect { 
-            fill: #6366F1 !important; 
-            stroke: rgba(0,0,0,0.2) !important;
-            rx: 3px;
-        }
-        
-        /* Product Delivery - Vibrant Teal */
-        .mermaid .section1 rect { 
-            fill: #0EA5E9 !important; 
-            stroke: rgba(0,0,0,0.2) !important;
-            rx: 3px;
-        }
-        
-        /* Product Development - Fresh Orange */
-        .mermaid .section2 rect { 
-            fill: #F97316 !important; 
-            stroke: rgba(0,0,0,0.2) !important;
-            rx: 3px;
-        }
-        
-        /* Tech Debt - Clean Red */
-        .mermaid .section3 rect { 
-            fill: #EF4444 !important; 
-            stroke: rgba(0,0,0,0.2) !important;
-            rx: 3px;
-        }
-        
-        /* Product Delivery, Governance & Innovation - Rich Purple */
-        .mermaid .section4 rect, 
-        .mermaid g[class*="section"]:nth-child(5) rect { 
-            fill: #8B5CF6 !important; 
-            stroke: rgba(0,0,0,0.2) !important;
-            rx: 3px;
-        }
-        
-        /* Improve task styling */
-        .mermaid .task rect { 
-            stroke-width: 1px !important;
-            opacity: 0.9 !important;
-            rx: 4px !important;
-        }
-        
-        /* Improve text contrast */
-        .mermaid .taskText { 
-            fill: #ffffff !important; 
-            font-weight: 500 !important;
-            text-shadow: 0 1px 1px rgba(0,0,0,0.5) !important;
-        }
-        
-        /* Section labels styling */
-        .mermaid .sectionTitle { 
-            font-weight: bold !important;
-            font-size: 14px !important;
-        }
-        
-        /* Grid styling */
-        .mermaid .grid path { 
-            stroke: #e5e5e5 !important; 
-        }
-        
-        /* Today line styling */
-        .mermaid .today { 
-            stroke: #FF5252 !important; 
-            stroke-width: 2px !important; 
-        }
-    </style>
+  <meta charset="utf-8">
+  <!-- Include Mermaid.js -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    /* --- Custom Gantt Styles --- */
+    .mermaid .taskText,
+    .mermaid .taskTextOutsideRight,
+    .mermaid .taskTextOutsideLeft {
+      /* Make all task text black for readability */
+      fill: #000 !important;
+      font-weight: 600;
+    }
+    .mermaid .grid .tick {
+      stroke: #ddd;
+      opacity: 0.3;
+    }
+    .mermaid .grid path {
+      stroke-width: 0;
+    }
+    /* Section 0 = Governance & Innovation (Green) */
+    .mermaid .active0 {
+      fill: #2ECC71 !important;
+      stroke: none !important;
+    }
+    .mermaid .task0 {
+      /* Planned tasks: semi-transparent green fill + dashed green border */
+      fill: rgba(46,204,113,0.5) !important;
+      stroke: #2ECC71 !important;
+      stroke-width: 2px;
+      stroke-dasharray: 4 4;
+    }
+    /* Section 1 = Product Delivery (Blue) */
+    .mermaid .active1 {
+      fill: #3498DB !important;
+      stroke: none !important;
+    }
+    .mermaid .task1 {
+      fill: rgba(52,152,219,0.5) !important;
+      stroke: #3498DB !important;
+      stroke-width: 2px;
+      stroke-dasharray: 4 4;
+    }
+    /* Section 2 = Product Development (Orange) */
+    .mermaid .active2 {
+      fill: #E67E22 !important;
+      stroke: none !important;
+    }
+    .mermaid .task2 {
+      fill: rgba(230,126,34,0.5) !important;
+      stroke: #E67E22 !important;
+      stroke-width: 2px;
+      stroke-dasharray: 4 4;
+    }
+    /* Section 3 = Tech Debt (Purple) */
+    .mermaid .active3 {
+      fill: #9B59B6 !important;
+      stroke: none !important;
+    }
+    .mermaid .task3 {
+      fill: rgba(155,89,182,0.5) !important;
+      stroke: #9B59B6 !important;
+      stroke-width: 2px;
+      stroke-dasharray: 4 4;
+    }
+    /* Remove any default stroke on milestones (if used) */
+    .mermaid .milestone {
+      stroke: none !important;
+    }
+    /* Optional: style the today marker if desired */
+    .mermaid .todayMarker {
+      stroke: #FF0000;
+      stroke-width: 4px;
+      opacity: 0.5;
+    }
+  </style>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',        /* use base theme to allow custom styling */
+      gantt: {
+        titleTopMargin: 25,
+        barHeight: 20,
+        barGap: 4,
+        topPadding: 75,
+        rightPadding: 75,
+        leftPadding: 75,
+        gridLineStartPadding: 10,
+        fontSize: 12,
+        sectionFontSize: 16,
+        numberSectionStyles: 1
+      }
+    });
+  </script>
 </head>
 <body>
-    <div class="standalone-only">
-        <h1>Architecture Roadmap</h1>
-        
-        <div>
-            <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
-            <button class="export-btn" onclick="window.location.href='export-confluence.html'">Export for Confluence</button>
-        </div>
-    </div>
-    
-    <h2>Roadmap Timeline</h2>
-    <div class="mermaid-container">
-        <div id="mermaid-chart"></div>
-    </div>
-    
-    <h2>Project Details</h2>
-    <div class="table-container">
-        <table id="project-table">
-            <thead>
-                <tr>
-                    <th>Project</th>
-                    <th>Architect</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Description</th>
-                    <th>Technologies</th>
-                </tr>
-            </thead>
-            <tbody id="project-table-body">
-                <!-- Table content will be inserted here -->
-            </tbody>
-        </table>
-    </div>
+<div class="mermaid">
+gantt
+    title Architecture Team Roadmap 2025
+    dateFormat  YYYY-MM-DD
+    axisFormat  %b/%Y
 
-    <script>
-        // Check if this page is being embedded
-        const urlParams = new URLSearchParams(window.location.search);
-        const isEmbedded = urlParams.get('embedded') === 'true';
-        
-        // Show standalone elements if not embedded
-        if (!isEmbedded) {
-            document.querySelectorAll('.standalone-only').forEach(el => {
-                el.style.display = 'block';
-            });
-        }
-        
-        // Initialize Mermaid
-        mermaid.initialize({
-            startOnLoad: true,
-            securityLevel: 'loose',
-            gantt: {
-                barHeight: 20,
-                barGap: 4,
-                topPadding: 50,
-                leftPadding: 150,
-                rightPadding: 20,
-                fontFamily: 'Arial, sans-serif',
-                fontSize: 12,
-                numberSectionStyles: 10,
-                axisFormat: '%b %Y'
-            }
-        });
+    section Governance & Innovation
+      Governance Workshop       :active, GW, 2025-01-01, 30d
+      Innovate Pipeline         :IP, after GW, 45d
 
-        // Function to sort and group projects by type
-        function sortProjectsByType(projects) {
-            const groupedProjects = {};
-            
-            // Group projects by type
-            projects.forEach(project => {
-                if (!groupedProjects[project.type]) {
-                    groupedProjects[project.type] = [];
-                }
-                groupedProjects[project.type].push(project);
-            });
-            
-            // Sort projects within each type by start date
-            Object.keys(groupedProjects).forEach(type => {
-                groupedProjects[type].sort((a, b) => {
-                    return new Date(a.start_date) - new Date(b.start_date);
-                });
-            });
-            
-            return groupedProjects;
-        }
+    section Product Delivery
+      Release v1.0              :RV1, 2025-03-01, 60d
+      Release v1.1              :after RV1, 60d
 
-        // Generate Mermaid Gantt Chart
-        function generateMermaidChart(projects) {
-            const groupedProjects = sortProjectsByType(projects);
-            
-            let mermaidCode = `gantt
-  title Architecture Roadmap Timeline
-  dateFormat YYYY-MM-DD
-  axisFormat %b %Y
-`;
+    section Product Development
+      New Feature X             :NX, 2025-01-15, 90d
+      New Feature Y             :NY, after NX, 60d
 
-            Object.keys(groupedProjects).forEach(type => {
-                mermaidCode += `\n  section ${type}\n`;
-                
-                groupedProjects[type].forEach(project => {
-                    const status = project.status === 'Planned' ? 'planned' : 'active';
-                    // Escape special characters that might cause issues
-                    const projectName = project.project_name.replace(/:/g, " -").replace(/[#,]/g, " ");
-                    const architect = project.architect.replace(/:/g, " -").replace(/[#,]/g, " ");
-                    
-                    mermaidCode += `    ${projectName} (${architect}) :${status}, ${project.start_date}, ${project.end_date}\n`;
-                });
-            });
-            
-            return mermaidCode;
-        }
-
-        // Generate HTML Table
-        function generateProjectTable(projects) {
-            const tableBody = document.getElementById('project-table-body');
-            tableBody.innerHTML = ''; // Clear existing content
-            
-            projects.forEach(project => {
-                const row = document.createElement('tr');
-                
-                // Add cells with project data
-                row.innerHTML = `
-                    <td>${project.project_name || ''}</td>
-                    <td>${project.architect || ''}</td>
-                    <td>${project.type || ''}</td>
-                    <td>${project.status || ''}</td>
-                    <td>${project.start_date || ''}</td>
-                    <td>${project.end_date || ''}</td>
-                    <td>${project.description || ''}</td>
-                    <td>${(project.technologies || []).join(', ')}</td>
-                `;
-                
-                tableBody.appendChild(row);
-            });
-        }
-
-        // Export table data to CSV - Make this globally accessible for the parent frame
-        window.exportToCSV = function() {
-            const table = document.getElementById('project-table');
-            let csv = [];
-            
-            // Add header row
-            const headerRow = [];
-            const headers = table.querySelectorAll('th');
-            headers.forEach(header => {
-                headerRow.push(`"${header.textContent}"`);
-            });
-            csv.push(headerRow.join(','));
-            
-            // Add data rows
-            const rows = table.querySelectorAll('tbody tr');
-            rows.forEach(row => {
-                const rowData = [];
-                const cells = row.querySelectorAll('td');
-                cells.forEach(cell => {
-                    rowData.push(`"${cell.textContent.replace(/"/g, '""')}"`);
-                });
-                csv.push(rowData.join(','));
-            });
-            
-            // Create and trigger download
-            const csvContent = csv.join('\n');
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'architecture_roadmap.csv';
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
-
-        // Load the roadmap data and render
-        async function loadRoadmap() {
-            try {
-                const response = await fetch('roadmap-data.json');
-                if (!response.ok) {
-                    throw new Error('Failed to load roadmap data');
-                }
-                
-                const projects = await response.json();
-                
-                // Generate and render Mermaid chart
-                const mermaidCode = generateMermaidChart(projects);
-                document.getElementById('mermaid-chart').innerHTML = `<div class="mermaid">${mermaidCode}</div>`;
-                mermaid.init(undefined, document.querySelectorAll('.mermaid'));
-                
-                // Generate and render project table
-                generateProjectTable(projects);
-                
-            } catch (error) {
-                console.error('Error loading roadmap data:', error);
-                document.getElementById('mermaid-chart').innerHTML = `<div style="color: red;">Error loading roadmap data: ${error.message}</div>`;
-            }
-        }
-
-        // Initialize when the document is ready
-        document.addEventListener('DOMContentLoaded', loadRoadmap);
-    </script>
+    section Tech Debt
+      Refactor Module A         :RA, 2025-04-01, 30d
+      Infrastructure Upgrade    :IU, after RA, 60d
+</div>
 </body>
 </html>
