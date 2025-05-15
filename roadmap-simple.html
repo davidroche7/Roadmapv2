@@ -5,18 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Architecture Team Roadmap 2025</title>
 
-  <!-- Mermaid -->
+  <!-- Mermaid 10 -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 
   <style>
-    /* ---------- general page chrome (unchanged) ---------- */
+    /* ---------- page chrome (unchanged) ---------- */
     body{font-family:Arial,Helvetica,sans-serif;margin:20px;background:#f9f9f9;color:#333}
     h1,h2{margin:0 0 12px}
-    .export-btn{padding:8px 16px;margin:0 6px 12px 0;border:0;border-radius:4px;background:#4caf50;color:#fff;
-      cursor:pointer;transition:background .15s}
+    .export-btn{padding:8px 16px;margin:0 6px 12px 0;border:0;border-radius:4px;
+      background:#4caf50;color:#fff;cursor:pointer;transition:background .15s}
     .export-btn:hover{background:#3d9140}
 
-    /* ---------- containers ---------- */
     .mermaid-container,.table-container{background:#fff;border-radius:8px;
       box-shadow:0 2px 8px rgba(0,0,0,.05);margin:20px 0;padding:20px}
     table{width:100%;border-collapse:collapse}
@@ -25,17 +24,17 @@
     tr:nth-child(even){background:#fafafa}
     tr:hover{background:#f1f1f1}
 
-    /* ---------- MERMAID THEME OVERRIDES ---------- */
-    /* reset any outlines that caused the “black line” in the last section */
+    /* ---------- MERMAID OVERRIDES ---------- */
+    /* kill the random black border on section backgrounds */
     .mermaid g[class^="section"] rect{stroke:none!important}
 
-    /* task rectangles: rounded + subtle shadow */
+    /* nice rounded bars + subtle shadow */
     .mermaid .task rect{
       rx:4px;
       filter:drop-shadow(0 1px 2px rgba(0,0,0,.15));
     }
 
-    /* grid + axis */
+    /* grid + today line */
     .mermaid .grid .tick{stroke:#e5e5e5;opacity:.6}
     .mermaid .grid path{stroke-width:0}
     .mermaid .todayMarker{stroke:#ff5252;stroke-width:3px;opacity:.65}
@@ -43,192 +42,8 @@
     /* task labels */
     .mermaid .taskText,
     .mermaid .taskTextOutsideRight,
-    .mermaid .taskTextOutsideLeft{
-      fill:#000!important;font-weight:600
-    }
+    .mermaid .taskTextOutsideLeft{fill:#000!important;font-weight:600}
 
-    /* colour classes generated in JS */
-    .mermaid .governance rect{fill:#6366f1!important;stroke:#6366f1!important;color:#fff}
-    .mermaid .delivery   rect{fill:#0ea5e9!important;stroke:#0ea5e9!important;color:#fff}
-    .mermaid .development rect{fill:#f97316!important;stroke:#f97316!important;color:#fff}
-    .mermaid .techdebt   rect{fill:#ef4444!important;stroke:#ef4444!important;color:#fff}
-
-    /* status modifiers */
-    .mermaid .planned rect{
-      fill-opacity:.45!important;
-      stroke-dasharray:4 4!important;
-      stroke:#111!important;stroke-width:1.5!important
-    }
-    /* active inherits solid fill / no stroke, so no extra rule needed */
-  </style>
-
-  <script>
-    /* ---------- Mermaid setup ---------- */
-    mermaid.initialize({
-      startOnLoad:true,
-      theme:'base',            // minimal built-in styling so our CSS wins
-      securityLevel:'loose',
-      gantt:{
-        barHeight:20,
-        barGap:4,
-        topPadding:50,
-        leftPadding:150,
-        rightPadding:20,
-        fontFamily:'Arial, sans-serif',
-        fontSize:12,
-        sectionFontSize:14,
-        axisFormat:'%b %Y'
-      }
-    });
-
-    /* ---------- helper to group + sort ---------- */
-    function sortProjectsByType(projects){
-      const grouped={};
-      projects.forEach(p=>{
-        if(!grouped[p.type]) grouped[p.type]=[];
-        grouped[p.type].push(p);
-      });
-      Object.values(grouped).forEach(arr=>arr.sort(
-        (a,b)=>new Date(a.start_date)-new Date(b.start_date)));
-      return grouped;
-    }
-
-    /* ---------- build the Mermaid code ---------- */
-    function generateMermaidChart(projects){
-      const grouped=sortProjectsByType(projects);
-
-      /* define palette + safe classnames */
-      const typeInfo={
-        "Governance & Innovation":{cls:"governance",color:"#6366f1"},
-        "Product Delivery":       {cls:"delivery",   color:"#0ea5e9"},
-        "Product Development":    {cls:"development",color:"#f97316"},
-        "Tech Debt":              {cls:"techdebt",   color:"#ef4444"}
-      };
-
-      let chart=`gantt
-  title Architecture Roadmap Timeline
-  dateFormat YYYY-MM-DD
-  axisFormat %b %Y
-`;
-
-      let classDefs='', classAssign='';
-
-      /* build sections + tasks */
-      Object.keys(grouped).forEach(type=>{
-        chart+=`\n  section ${type}\n`;
-        grouped[type].forEach(p=>{
-          const statusCls=p.status==="Planned"?"planned":"active";
-          const typeCls =typeInfo[type]?.cls||"";
-          const id      =p.project_name.replace(/[^A-Za-z0-9]/g,"_"); // unique id
-          const name    =p.project_name.replace(/[:#,]/g," -");      // safe label
-          const arch    =p.architect.replace(/[:#,]/g," -");
-          chart+=`    ${name} (${arch}) :${id}, ${p.start_date}, ${p.end_date}\n`;
-          classAssign+=`class ${id} ${typeCls},${statusCls}\n`;
-        });
-      });
-
-      /* Mermaid class definitions (fill set via CSS—this just names them) */
-      classDefs=`classDef governance  stroke-width:0;
-classDef delivery    stroke-width:0;
-classDef development stroke-width:0;
-classDef techdebt    stroke-width:0;
-classDef planned     stroke-dasharray:4 4,stroke-width:1.5,fill-opacity:0.45;
-classDef active      stroke-width:0;
-`;
-
-      return chart + "\n" + classDefs + classAssign;
-    }
-
-    /* ---------- build project table ---------- */
-    function generateProjectTable(projects){
-      const tbody=document.getElementById("project-table-body");
-      tbody.innerHTML="";
-      projects.forEach(p=>{
-        const tr=document.createElement("tr");
-        tr.innerHTML=`
-          <td>${p.project_name||""}</td>
-          <td>${p.architect||""}</td>
-          <td>${p.type||""}</td>
-          <td>${p.status||""}</td>
-          <td>${p.start_date||""}</td>
-          <td>${p.end_date||""}</td>
-          <td>${p.description||""}</td>
-          <td>${(p.technologies||[]).join(", ")}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-
-    /* ---------- CSV export (unchanged) ---------- */
-    window.exportToCSV=function(){
-      const table=document.getElementById("project-table");
-      const csv=[];
-      csv.push([...table.querySelectorAll("th")].map(h=>`"${h.textContent}"`).join(","));
-      [...table.querySelectorAll("tbody tr")].forEach(row=>{
-        csv.push([...row.querySelectorAll("td")]
-          .map(td=>`"${td.textContent.replace(/\"/g,'""')}"`).join(","));
-      });
-      const blob=new Blob([csv.join("\n")],{type:"text/csv;charset=utf-8;"});
-      const link=document.createElement("a");
-      link.href=URL.createObjectURL(blob);
-      link.download="architecture_roadmap.csv";
-      link.style.visibility="hidden";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    };
-
-    /* ---------- main load ---------- */
-    async function loadRoadmap(){
-      try{
-        const resp=await fetch("roadmap-data.json");
-        if(!resp.ok) throw new Error("Failed to load roadmap data");
-        const projects=await resp.json();
-
-        /* Mermaid */
-        document.getElementById("mermaid-chart").innerHTML=
-          `<div class="mermaid">${generateMermaidChart(projects)}</div>`;
-        mermaid.init(undefined,document.querySelectorAll(".mermaid"));
-
-        /* Table */
-        generateProjectTable(projects);
-
-      }catch(err){
-        console.error(err);
-        document.getElementById("mermaid-chart")
-          .innerHTML=`<div style="color:red;">${err.message}</div>`;
-      }
-    }
-    document.addEventListener("DOMContentLoaded",loadRoadmap);
-  </script>
-</head>
-
-<body>
-  <h1>Architecture Team Roadmap 2025</h1>
-
-  <!-- export buttons -->
-  <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
-  <button class="export-btn" onclick="window.location.href='export-confluence.html'">
-    Export for Confluence
-  </button>
-
-  <!-- timeline -->
-  <h2>Roadmap Timeline</h2>
-  <div class="mermaid-container">
-    <div id="mermaid-chart"></div>
-  </div>
-
-  <!-- table -->
-  <h2>Project Details</h2>
-  <div class="table-container">
-    <table id="project-table">
-      <thead>
-        <tr>
-          <th>Project</th><th>Architect</th><th>Type</th><th>Status</th>
-          <th>Start Date</th><th>End Date</th><th>Description</th><th>Technologies</th>
-        </tr>
-      </thead>
-      <tbody id="project-table-body"></tbody>
-    </table>
-  </div>
-</body>
-</html>
+    /* ------- section colours (index-based) ------- */
+    .mermaid .section0 rect{fill:#6366f1!important}
+    .
