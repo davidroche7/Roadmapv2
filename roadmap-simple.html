@@ -56,6 +56,17 @@
         .standalone-only {
             display: none;
         }
+        
+        /* Add these lines right here, before the closing </style> tag */
+        /* Custom Gantt chart section colors */
+        .mermaid .section0 rect { fill: #7986CB !important; } /* Blue - Governance & Innovation */
+        .mermaid .section1 rect { fill: #66BB6A !important; } /* Green - Product Delivery */
+        .mermaid .section2 rect { fill: #FFB74D !important; } /* Orange - Product Development */
+        .mermaid .section3 rect { fill: #E57373 !important; } /* Red - Tech Debt */
+        .mermaid .section4 rect { fill: #9575CD !important; } /* Purple - Product Delivery, Governance & Innovation */
+
+        /* Slightly darker stroke for better visibility */
+        .mermaid .task rect { stroke: rgba(0, 0, 0, 0.3) !important; }
     </style>
 </head>
 <body>
@@ -118,6 +129,7 @@
                 rightPadding: 20,
                 fontFamily: 'Arial, sans-serif',
                 fontSize: 12
+                numberSectionStyles: 5
             }
         });
 
