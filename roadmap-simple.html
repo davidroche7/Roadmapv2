@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -171,17 +171,14 @@
                 // Use built-in section styling
                 const sectionStyle = `section${index % 10}`;
                 
-                // Get the color for this type or use default
-                const typeColor = typeColors[type] || defaultColor;
-                
                 groupedProjects[type].forEach(project => {
                     const status = project.status === 'Planned' ? 'planned' : 'active';
                     // Escape special characters that might cause issues
                     const projectName = project.project_name.replace(/:/g, " -").replace(/[#,]/g, " ");
                     const architect = project.architect.replace(/:/g, " -").replace(/[#,]/g, " ");
                     
-                    // Always explicitly set the color for all bars to ensure consistency
-                    mermaidCode += `    ${projectName} (${architect}) : ${status}, ${project.start_date}, ${project.end_date}, ${typeColor}\n`;
+                    // For all projects, use the standard syntax without explicit color
+                    mermaidCode += `    ${projectName} (${architect}) : ${status}, ${project.start_date}, ${project.end_date}\n`;
                 });
             });
             
