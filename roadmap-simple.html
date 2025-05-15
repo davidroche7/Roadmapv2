@@ -25,48 +25,29 @@
     tr:hover{background:#f1f1f1}
 
     /* ─────────  MERMAID OVERRIDES  ───────── */
-    /* remove black outline around section backgrounds */
     .mermaid g[class^="section"] rect{stroke:none!important}
-
-    /* bars: rounded corners + subtle drop-shadow */
-    .mermaid .task rect{
-      rx:4px;
-      filter:drop-shadow(0 1px 2px rgba(0,0,0,.15));
-    }
-
-    /* grid + today line */
+    .mermaid .task rect{rx:4px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.15))}
     .mermaid .grid .tick{stroke:#e5e5e5;opacity:.6}
     .mermaid .grid path{stroke-width:0}
     .mermaid .todayMarker{stroke:#ff5252;stroke-width:3px;opacity:.65}
-
-    /* labels */
     .mermaid .taskText,
     .mermaid .taskTextOutsideRight,
     .mermaid .taskTextOutsideLeft{fill:#000!important;font-weight:600}
 
-    /* section colours (index-based) */
     .mermaid .section0 rect{fill:#6366f1!important}
     .mermaid .section1 rect{fill:#0ea5e9!important}
     .mermaid .section2 rect{fill:#f97316!important}
     .mermaid .section3 rect{fill:#ef4444!important}
 
-    /* status tweaks */
-    /* “crit” → we’ll use for Planned */
-    .mermaid .task.crit rect{
-      fill-opacity:.45!important;
-      stroke-dasharray:4 4!important;
-      stroke:#111!important;
-      stroke-width:1.5!important;
-    }
-    /* “done” (if any completed tasks) */
+    .mermaid .task.crit rect{fill-opacity:.45!important;stroke-dasharray:4 4!important;
+      stroke:#111!important;stroke-width:1.5!important}
     .mermaid .task.done rect{opacity:.35!important;filter:grayscale(60%)}
   </style>
 
   <script>
-    /* ─────────  Mermaid global init  ───────── */
     mermaid.initialize({
       startOnLoad:true,
-      theme:'base',             // minimal default so our CSS wins
+      theme:'base',
       securityLevel:'loose',
       gantt:{
         barHeight:20,
@@ -81,8 +62,7 @@
       }
     });
 
-    /* ─────────  utilities  ───────── */
-    /* group + sort projects by type */
+    /* helper: group + sort */
     function sortProjectsByType(projects){
       const g={};
       projects.forEach(p=>{
@@ -94,14 +74,10 @@
       return g;
     }
 
-    /* build Gantt code */
+    /* build Gantt safely */
     function generateMermaidChart(projects){
       const order=[
-        "Governance & Innovation",
-        "Product Delivery",
-        "Product Development",
-        "Tech Debt"
-      ];
+        "Governance & Innovation","Product Delivery","Product Development","Tech Debt"];
       const grouped=sortProjectsByType(projects);
       const types=[...order,...Object.keys(grouped).filter(t=>!order.includes(t))];
 
@@ -111,31 +87,33 @@
   axisFormat  %b %Y
 `;
 
-      types.forEach((type)=>{
+      types.forEach(type=>{
         const list=grouped[type];
         if(!list) return;
         out+=`\n  section ${type}\n`;
         list.forEach(p=>{
           const status=(p.status||"").toLowerCase();
           let token="";
-          if(status.includes("planned"))      token="crit";
-          else if(status.includes("progress"))token="active";
-          else if(status.includes("complete"))token="done";
+          if(status.includes("planned")||status.includes("not started")||status.includes("backlog"))
+              token="crit";
+          else if(status.includes("progress")) token="active";
+          else if(status.includes("complete")) token="done";
 
           const id  =p.project_name.replace(/[^A-Za-z0-9]/g,"");
           const name=p.project_name.replace(/[:#,]/g,"-");
           const arch=p.architect.replace(/[:#,]/g,"-");
 
-          out+=`    ${name} (${arch}) :${token}, ${id}, ${p.start_date}, ${p.end_date}\n`;
+          const statusSeg = token ? `${token}, ` : "";   // ← only if we have a token
+          out+=`    ${name} (${arch}) :${statusSeg}${id}, ${p.start_date}, ${p.end_date}\n`;
         });
       });
       return out;
     }
 
-    /* fill “Project Details” table */
+    /* table */
     function populateTable(projects){
-      const tbody=document.getElementById("project-table-body");
-      tbody.innerHTML="";
+      const tb=document.getElementById("project-table-body");
+      tb.innerHTML="";
       projects.forEach(p=>{
         const tr=document.createElement("tr");
         tr.innerHTML=`
@@ -147,11 +125,11 @@
           <td>${p.end_date||""}</td>
           <td>${p.description||""}</td>
           <td>${(p.technologies||[]).join(", ")}</td>`;
-        tbody.appendChild(tr);
+        tb.appendChild(tr);
       });
     }
 
-    /* export CSV */
+    /* CSV export */
     window.exportToCSV=function(){
       const table=document.getElementById("project-table");
       const csv=[];
@@ -170,19 +148,17 @@
       document.body.removeChild(link);
     };
 
-    /* ─────────  main load  ───────── */
+    /* main */
     async function loadRoadmap(){
       try{
         const resp=await fetch("roadmap-data.json");
         if(!resp.ok) throw new Error("roadmap-data.json not found");
         const projects=await resp.json();
 
-        /* Gantt */
         document.getElementById("mermaid-chart").innerHTML=
           `<div class="mermaid">${generateMermaidChart(projects)}</div>`;
         mermaid.init(undefined,document.querySelectorAll(".mermaid"));
 
-        /* Table */
         populateTable(projects);
 
       }catch(err){
@@ -198,32 +174,23 @@
 <body>
   <h1>Architecture Team Roadmap 2025</h1>
 
-  <!-- export buttons -->
   <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
   <button class="export-btn" onclick="window.location.href='export-confluence.html'">
     Export for Confluence
   </button>
 
-  <!-- timeline -->
   <h2>Roadmap Timeline</h2>
   <div class="mermaid-container">
     <div id="mermaid-chart"></div>
   </div>
 
-  <!-- table -->
   <h2>Project Details</h2>
   <div class="table-container">
     <table id="project-table">
       <thead>
         <tr>
-          <th>Project</th>
-          <th>Architect</th>
-          <th>Type</th>
-          <th>Status</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-          <th>Description</th>
-          <th>Technologies</th>
+          <th>Project</th><th>Architect</th><th>Type</th><th>Status</th>
+          <th>Start&nbsp;Date</th><th>End&nbsp;Date</th><th>Description</th><th>Technologies</th>
         </tr>
       </thead>
       <tbody id="project-table-body"></tbody>
