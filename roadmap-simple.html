@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -155,30 +155,35 @@
   axisFormat %b %Y
   
 `;
- // Color mapping for different project types
-        const typeColors = {
-            'Governance & Innovation': '#7986CB', // Blue
-            'Product Delivery': '#66BB6A',        // Green
-            'Product Development': '#FFB74D',     // Orange/Amber
-            'Tech Debt': '#E57373',               // Red
-            'Product Delivery, Governance & Innovation': '#9575CD' // Purple
-        };
-    // Default color if type not found in mapping
-        const defaultColor = '#78909C';
-        Object.keys(groupedProjects).forEach((type, index) => {
-        mermaidCode += `\n  section ${type}\n`;
-    // Get the color for this type or use default
-        const typeColor = typeColors[type] || defaultColor;
-    // Use built-in section styling
-        const sectionStyle = `section${index % 10}`;
-        groupedProjects[type].forEach(project => {
-        const status = project.status === 'Planned' ? 'planned' : 'active';
-    // Escape special characters that might cause issues
-        const projectName = project.project_name.replace(/:/g, " -").replace(/[#,]/g, " ");
-        const architect = project.architect.replace(/:/g, " -").replace(/[#,]/g, " ");
-        mermaidCode += `    ${projectName} (${architect}) : ${status}, ${project.start_date}, ${project.end_date}\n`;
-    });
-        });
+            // Color mapping for different project types
+            const typeColors = {
+                'Governance & Innovation': '#7986CB', // Blue
+                'Product Delivery': '#66BB6A',        // Green
+                'Product Development': '#FFB74D',     // Orange/Amber
+                'Tech Debt': '#E57373',               // Red
+                'Product Delivery, Governance & Innovation': '#9575CD' // Purple
+            };
+            // Default color if type not found in mapping
+            const defaultColor = '#78909C';
+            
+            Object.keys(groupedProjects).forEach((type, index) => {
+                mermaidCode += `\n  section ${type}\n`;
+                // Use built-in section styling
+                const sectionStyle = `section${index % 10}`;
+                
+                // Get the color for this type or use default
+                const typeColor = typeColors[type] || defaultColor;
+                
+                groupedProjects[type].forEach(project => {
+                    const status = project.status === 'Planned' ? 'planned' : 'active';
+                    // Escape special characters that might cause issues
+                    const projectName = project.project_name.replace(/:/g, " -").replace(/[#,]/g, " ");
+                    const architect = project.architect.replace(/:/g, " -").replace(/[#,]/g, " ");
+                    
+                    // Always explicitly set the color for all bars to ensure consistency
+                    mermaidCode += `    ${projectName} (${architect}) : ${status}, ${project.start_date}, ${project.end_date}, ${typeColor}\n`;
+                });
+            });
             
             return mermaidCode;
         }
